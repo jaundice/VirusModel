@@ -1,15 +1,15 @@
 export class List<T> {
     private items: Array<T>;
-    constructor( copy:List<T> = null ) {
+    constructor(copy: List<T> = null) {
         this.items = [];
 
-        if((copy)){
-            copy.forEach(a=> this.add(a));
+        if ((copy)) {
+            copy.forEach(a => this.add(a));
         }
 
     }
 
-    
+
 
     get size(): number {
         return this.items.length;
@@ -21,10 +21,14 @@ export class List<T> {
         return this.items[index];
     }
 
-    
+    set(index: number, value: T) {
+        this.items[index] = value;
+    }
 
-    forEach( callback : (e:T)=>void ){
-        for(var i=0;i<this.size; i++ ){
+
+
+    forEach(callback: (e: T) => void) {
+        for (var i = 0; i < this.size; i++) {
             callback(this.get(i));
         }
     }

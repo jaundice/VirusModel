@@ -23,4 +23,6 @@ export class AppInitConfig {
 
     ChildRetailFactor: number = 0.2;
 
+    QuarantineWholeHouseholdOnInfection:boolean = false;
+
 };

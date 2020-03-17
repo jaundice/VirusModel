@@ -14,6 +14,7 @@ export class App {
     People: List<Person> = new List<Person>();
     UsualDaytimeEnvironmentMap: Map<Environment, List<Person>> = new Map<Environment, List<Person>>();
     Households: List<List<Person>> = new List<List<Person>>();
+    QuarantinedHouseholds: List<boolean> = new List<boolean>();
 
     Config: AppInitConfig = new AppInitConfig();
 
@@ -102,6 +103,8 @@ export class App {
     TimeElapsed() {
         this.Time.Tick();
 
+        this.UpdateQuarantine();
+
 
         this.People.forEach(o => {
             this.UpdateStatusByTick(o);
@@ -130,6 +133,13 @@ export class App {
         else if (this.Time.Hour < 24) {
             //adult social / home
             this.DoNightime();
+        }
+    }
+    UpdateQuarantine() { //always updates even if tracking is off in config
+        for (var i = 0; i < this.Households.size; i++) {
+            var doQuarantine = false;
+            this.Households.get(i).forEach(o => { if (o.isQuarantined) doQuarantine = true; });
+            this.QuarantinedHouseholds.set(i, doQuarantine);
         }
     }
     UpdateStatusByTick(person: Person) {
@@ -198,14 +208,14 @@ export class App {
             }
             case Status.Clear: {
                 person.isQuarantined = false;
-                if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability/24) {
+                if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability / 24) {
                     person.statusHandler = new AsymptomaticStatusHandler();
                 }
                 return;
             }
             case Status.Recovered: {
                 person.isQuarantined = false;
-                if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability * this.Config.ReinfectionProbability /24) {
+                if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability * this.Config.ReinfectionProbability / 24) {
                     person.statusHandler = new AsymptomaticStatusHandler();
                 }
                 return;
@@ -218,19 +228,25 @@ export class App {
         person2: Person,
         contactFactor: number /* how much personal interaction people in the environment have*/): StatusHandler {
 
+
+        if (person1.householdIndex != person2.householdIndex && this.Config.QuarantineWholeHouseholdOnInfection) {
+            if (this.QuarantinedHouseholds.get(person1.householdIndex) || this.QuarantinedHouseholds.get(person2.householdIndex))
+                return person1.statusHandler;
+        }
+
         if (person1 === person2) {
             return person1.statusHandler;
         }
 
         if ((/* neither has the illness */ person1.statusHandler.Status == Status.Clear && person2.statusHandler.Status == Status.Clear)
-            || /* one or other party are quarantined so they dont really meet */ (person1.isQuarantined || person2.isQuarantined)) {
+            || /* one or other party are quarantined so they dont really meet unless they share a household */ ((person1.isQuarantined || person2.isQuarantined) && (person1.householdIndex != person2.householdIndex))) {
             return person1.statusHandler;
         }
 
 
 
 
-        var chance = contactFactor * person2.statusHandler.Infectiousness * person1.susceptability /24;
+        var chance = contactFactor * person2.statusHandler.Infectiousness * person1.susceptability / 24;
 
         switch (person1.statusHandler.Status) {
             case Status.Dead: {
@@ -439,7 +455,7 @@ export class App {
                 var p: Person = this.People.get(i);
 
                 if (p.usualDaytimeEnvironment.environmentType == EnvironmentType.Retail || p.usualDaytimeEnvironment.environmentType == EnvironmentType.Home || p.usualDaytimeEnvironment.environmentType == EnvironmentType.Office) {
-                    if (Stats.getUniform(0, 1) < this.Config.SocialEveningFactor /this.Config.EnvironmentCounts.get(EnvironmentType.Social) ) {
+                    if (Stats.getUniform(0, 1) < this.Config.SocialEveningFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
                         combinedSet.add(p);
                     }
                 }

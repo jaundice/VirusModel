@@ -27,6 +27,7 @@ function Run() {
     c.MeanInterpersonalContactFactors.set(EnvironmentType.School, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.School, 0.1);
 
+    //number of different types of environment
     c.EnvironmentCounts.set(EnvironmentType.School, 5);
     c.EnvironmentCounts.set(EnvironmentType.Office, 100);
     c.EnvironmentCounts.set(EnvironmentType.Retail, 20);
@@ -39,7 +40,6 @@ function Run() {
     c.RecoveryTime = 14; //days
     c.AsymptomaticTime = 7; //days
     c.DeathRatio = 0.2; //proportion of severe cases that are terminal
-    c.MildSymptomsQuarantineFactor = 0.6; //proportion of mild cases going into quarantine
 
     c.SocialEveningFactor = 0.08; //proportion of adults socialising at night
     c.SocialLunchFactor = 0.1; // proprtion of adults socialising at lunch;
@@ -47,6 +47,9 @@ function Run() {
     c.SocialChildFactor = 0.2; // proportion of children socializing after school
 
     c.ChildRetailFactor = 0.1; //children shopping out of school hours
+
+    c.MildSymptomsQuarantineFactor = 0.2; //proportion of mild cases going into quarantine
+    c.QuarantineWholeHouseholdOnInfection = true; //quarantine whole household if any housemember is quarantined
 
     var app = new App();
     app.Init(c);
@@ -83,12 +86,13 @@ function Run() {
             }
         });
 
-        console.log(`Day ${a.Time.Day},\tHour ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
+        //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
+        console.log(`${a.Time.Day},${a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
 
 
     };
 
-    for (var i = 0; i < 5000; i++) {
+    for (var i = 0; i < 11000; i++) {
         app.TimeElapsed();
 
         reporter(app);
