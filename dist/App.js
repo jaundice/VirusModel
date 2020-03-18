@@ -1,6 +1,23 @@
-define(["require", "exports", "./EnvironmentType", "./Environment", "./StatusHandler", "./Person", "./Stats", "./AppInitConfig", "./Time", "./Status", "./List"], function (require, exports, EnvironmentType_1, Environment_1, StatusHandler_1, Person_1, Stats_1, AppInitConfig_1, Time_1, Status_1, List_1) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "./EnvironmentType", "./Environment", "./StatusHandler", "./Person", "./Stats", "./AppInitConfig", "./Time", "./Status", "./List"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const EnvironmentType_1 = require("./EnvironmentType");
+    const Environment_1 = require("./Environment");
+    const StatusHandler_1 = require("./StatusHandler");
+    const Person_1 = require("./Person");
+    const Stats_1 = require("./Stats");
+    const AppInitConfig_1 = require("./AppInitConfig");
+    const Time_1 = require("./Time");
+    const Status_1 = require("./Status");
+    const List_1 = require("./List");
     class App {
         constructor() {
             this.Environments = new Map();

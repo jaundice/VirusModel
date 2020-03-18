@@ -1,6 +1,16 @@
-define(["require", "exports", "./Status", "./Time"], function (require, exports, Status_1, Time_1) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "./Status", "./Time"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const Status_1 = require("./Status");
+    const Time_1 = require("./Time");
     class StatusHandler {
         constructor(status) {
             this._time = new Time_1.Time();

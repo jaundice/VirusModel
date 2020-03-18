@@ -1,6 +1,18 @@
-define(["require", "exports", "./AppInitConfig", "./App", "./EnvironmentType", "./Status"], function (require, exports, AppInitConfig_1, App_1, EnvironmentType_1, Status_1) {
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
+    }
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports", "./AppInitConfig", "./App", "./EnvironmentType", "./Status"], factory);
+    }
+})(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const AppInitConfig_1 = require("./AppInitConfig");
+    const App_1 = require("./App");
+    const EnvironmentType_1 = require("./EnvironmentType");
+    const Status_1 = require("./Status");
     function Run() {
         var c = new AppInitConfig_1.AppInitConfig();
         c.PopulationSize = 50000;
