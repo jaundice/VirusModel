@@ -20,6 +20,13 @@ export class App {
 
     Time: Time = new Time();
 
+    private clamp = (min:number, max:number, gen:()=>number) => {
+        var n = gen();
+
+        n = Math.max(min, n);
+        n = Math.min(max, n);
+        return n;
+    }
 
     Init(config: AppInitConfig) {
         this.Config = config;
@@ -29,10 +36,12 @@ export class App {
             this.Households.add(new List<Person>());
         }
 
+
+
         //create environments
         config.EnvironmentCounts.forEach((count, key) => {
 
-            var interpersonalContactGenerator = Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key));
+            var interpersonalContactGenerator = this.clamp(0, 1,  Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key)));
 
             if (!this.Environments.has(key))
                 this.Environments.set(key, new List<Environment>());
@@ -42,14 +51,14 @@ export class App {
 
                 var env = new Environment();
                 env.environmentType = key;
-                env.interpersonalContactFactor = interpersonalContactGenerator();
+                env.interpersonalContactFactor = interpersonalContactGenerator;
 
                 this.Environments.get(key)?.add(env);
             }
         });
 
         //create a generator that makes a random susceptability given the config mean and standard deviation
-        var susceptabilityGenerator = Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation);
+        var susceptabilityGenerator = this.clamp(0,1, Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation));
 
         //create temp structures to arrange environments
         var nonSchoolEnvironments = new List<Environment>();
@@ -70,7 +79,7 @@ export class App {
         //make the population
         for (var i = 0; i < config.PopulationSize; i++) {
             var person = new Person();
-            person.susceptability = susceptabilityGenerator();
+            person.susceptability = susceptabilityGenerator;
             person.statusHandler = new CleanStatusHandler(); //everbody starts clean
 
             this.People.add(person);

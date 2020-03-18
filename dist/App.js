@@ -27,6 +27,12 @@
             this.QuarantinedHouseholds = new List_1.List();
             this.Config = new AppInitConfig_1.AppInitConfig();
             this.Time = new Time_1.Time();
+            this.clamp = (min, max, gen) => {
+                var n = gen();
+                n = Math.max(min, n);
+                n = Math.min(max, n);
+                return n;
+            };
         }
         Init(config) {
             var _a, _b;
@@ -38,18 +44,18 @@
             //create environments
             config.EnvironmentCounts.forEach((count, key) => {
                 var _a;
-                var interpersonalContactGenerator = Stats_1.Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key));
+                var interpersonalContactGenerator = this.clamp(0, 1, Stats_1.Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key)));
                 if (!this.Environments.has(key))
                     this.Environments.set(key, new List_1.List());
                 for (var k = 0; k < count; k++) {
                     var env = new Environment_1.Environment();
                     env.environmentType = key;
-                    env.interpersonalContactFactor = interpersonalContactGenerator();
+                    env.interpersonalContactFactor = interpersonalContactGenerator;
                     (_a = this.Environments.get(key)) === null || _a === void 0 ? void 0 : _a.add(env);
                 }
             });
             //create a generator that makes a random susceptability given the config mean and standard deviation
-            var susceptabilityGenerator = Stats_1.Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation);
+            var susceptabilityGenerator = this.clamp(0, 1, Stats_1.Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation));
             //create temp structures to arrange environments
             var nonSchoolEnvironments = new List_1.List();
             var schoolEnvironments = new List_1.List();
@@ -68,7 +74,7 @@
             //make the population
             for (var i = 0; i < config.PopulationSize; i++) {
                 var person = new Person_1.Person();
-                person.susceptability = susceptabilityGenerator();
+                person.susceptability = susceptabilityGenerator;
                 person.statusHandler = new StatusHandler_1.CleanStatusHandler(); //everbody starts clean
                 this.People.add(person);
                 if (i < config.NumberOfHouseholds) { //ensure each household has a member
