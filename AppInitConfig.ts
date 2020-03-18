@@ -6,7 +6,7 @@ export class AppInitConfig {
     EnvironmentCounts: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();
     MeanInterpersonalContactFactors: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();
     MeanInterpersonalDeviation: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();
-    MeanPersonalSuceptability: number = 0.6;
+    MeanPersonalSusceptability: number = 0.6;
     PersonalSuceptabilityDeviation: number = 0.15;
     AsymptomaticTime: number = 7;
     RecoveryTime: number = 14;

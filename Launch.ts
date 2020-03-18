@@ -13,7 +13,7 @@ function Run() {
     c.ReinfectionProbability = 0.08;
     c.RandomInfectionProbability = 0.000005;
     c.PersonalSuceptabilityDeviation = 0.015;
-    c.MeanPersonalSuceptability = 0.3;
+    c.MeanPersonalSusceptability = 0.3;
 
     c.MeanInterpersonalContactFactors.set(EnvironmentType.Home, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.Home, 0.15);
@@ -87,10 +87,16 @@ function Run() {
         });
 
         //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
-        console.log(`${a.Time.Day},${a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
-
-
+        console.log(`${a.Time.Day},${a.Time.Hour},${a.Time.Day *24 + a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
     };
+
+
+    console.log(JSON.stringify(c));
+
+    console.log();
+
+    console.log("Day,Hour,TotalHours,clearCount,asymptomaticCount,mildCount,seriousCount,recoveredCount,deadCount");
+
 
     for (var i = 0; i < 11000; i++) {
         app.TimeElapsed();

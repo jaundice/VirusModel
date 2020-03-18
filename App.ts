@@ -49,7 +49,7 @@ export class App {
         });
 
         //create a generator that makes a random susceptability given the config mean and standard deviation
-        var susceptabilityGenerator = Stats.getGaussianRandomGenerator(config.MeanPersonalSuceptability, config.PersonalSuceptabilityDeviation);
+        var susceptabilityGenerator = Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation);
 
         //create temp structures to arrange environments
         var nonSchoolEnvironments = new List<Environment>();
