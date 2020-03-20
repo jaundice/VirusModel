@@ -15,6 +15,11 @@ I am now trying to enhance the first version with changes over time with policy 
 ## current knowledge: 
 * probably 80% of infections go unregistered
 
+
+from https://www.worldometers.info/demographics/uk-demographics/
+* UK population 67886011
+* 82.9 % urban 
+
 From skynews interview with ICU doctor
 * 10% hospitalised
 * 4% ICU
@@ -72,6 +77,30 @@ Supermarkets, food, pharmacy
 * virus testing
 * antibody testing
 * ...
+
+## Age Demographics
+https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest#main-facts-and-figures
+<pre>
+Age         Percentage
+0-4         6.2
+5-9         5.6
+10-14       5.8
+15-17       3.7
+18-24       9.4
+25-29       6.8
+30-34       6.6
+35-39       6.7
+40-44       7.3
+45-49       7.3
+50-54       6.4
+55-59       5.7
+60-64       6.0
+65-69       4.8
+70-74       3.9
+75-79       3.2
+80-84       2.4
+85+         2.2
+</pre>
 
 
 # Things to model:
