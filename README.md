@@ -55,6 +55,8 @@ Supermarkets, food, pharmacy
 * social distancing
 * lockdown 
 * medic isolation
+* virus testing
+* antibody testing
 * ...
 
 
