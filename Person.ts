@@ -1,13 +1,26 @@
 import { StatusHandler } from "./StatusHandler";
 import { Environment } from './Environment';
+import { AgeDemographic } from './Demographic';
+import { Health } from './Health';
 
 
 export class Person {
     private _statusHandler: StatusHandler;
-    private _susceptability: number;
+    //private _susceptability: number;
     private _householdIndex: number;
     private _usualDaytimeEnvironment: Environment;
     private _isQuarantined: boolean;
+
+    private _ageDemographic:AgeDemographic;
+    private _health: Health;
+
+    get AgeDemographic(){
+        return this._ageDemographic;
+    }
+
+    get Health():Health{
+        return this._health;
+    }
 
     get statusHandler(): StatusHandler {
         return this._statusHandler;
@@ -18,12 +31,12 @@ export class Person {
     }
 
     get susceptability(): number {
-        return this._susceptability;
+        return  1.0 - this.Health.HealthScore;  //this._susceptability;
     }
 
-    set susceptability(susceptability: number) {
-        this._susceptability = susceptability;
-    }
+    // set susceptability(susceptability: number) {
+    //     this._susceptability = susceptability;
+    // }
 
     get householdIndex(): number {
         return this._householdIndex;
@@ -47,5 +60,10 @@ export class Person {
 
     set isQuarantined(q: boolean) {
         this._isQuarantined = q;
+    }
+
+    constructor(ageDemographic:AgeDemographic, health:Health){
+        this._health = health;
+        this._ageDemographic = ageDemographic;
     }
 };

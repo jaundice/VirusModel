@@ -27,7 +27,7 @@ export class Health {
         if (this.HasHeartDisease) {
             neg += 100;
         }
-        this._healthScore = 1 - (Math.sqrt(neg / 22.36));
+        this._healthScore = 1 - (Math.sqrt(neg) / 22.36);
     }
     /* breaking these out in case futher info becomes available about relative outcomes */
     get HasCancer(): boolean {

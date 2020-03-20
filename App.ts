@@ -7,6 +7,7 @@ import { AppInitConfig } from "./AppInitConfig";
 import { Time } from "./Time";
 import { Status } from "./Status";
 import { List } from "./List";
+import { Demographics, AgeDemographic } from './Demographic';
 
 
 export class App {
@@ -20,7 +21,7 @@ export class App {
 
     Time: Time = new Time();
 
-    private clamp = (min:number, max:number, gen:()=>number) => {
+    private clamp = (min: number, max: number, gen: () => number) => {
         var n = gen();
 
         n = Math.max(min, n);
@@ -41,7 +42,7 @@ export class App {
         //create environments
         config.EnvironmentCounts.forEach((count, key) => {
 
-            var interpersonalContactGenerator = this.clamp(0, 1,  Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key)));
+            var interpersonalContactGenerator = this.clamp(0, 1, Stats.getGaussianRandomGenerator(config.MeanInterpersonalContactFactors.get(key), config.MeanInterpersonalDeviation.get(key)));
 
             if (!this.Environments.has(key))
                 this.Environments.set(key, new List<Environment>());
@@ -58,7 +59,7 @@ export class App {
         });
 
         //create a generator that makes a random susceptability given the config mean and standard deviation
-        var susceptabilityGenerator = this.clamp(0,1, Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation));
+        //var susceptabilityGenerator = this.clamp(0, 1, Stats.getGaussianRandomGenerator(config.MeanPersonalSusceptability, config.PersonalSuceptabilityDeviation));
 
         //create temp structures to arrange environments
         var nonSchoolEnvironments = new List<Environment>();
@@ -77,9 +78,15 @@ export class App {
         });
 
         //make the population
+        // todo: ensure children are assigned to households with adults, 
+        // assign adults to environments based on census data, add key healthcare professionals, delivery etc 
         for (var i = 0; i < config.PopulationSize; i++) {
-            var person = new Person();
-            person.susceptability = susceptabilityGenerator;
+
+            var ageDemograhic = Demographics.RandomAgeDemographic();
+            var health = Demographics.getRandomHealth(ageDemograhic);
+
+            var person = new Person(ageDemograhic, health);
+            //person.susceptability = susceptabilityGenerator;
             person.statusHandler = new CleanStatusHandler(); //everbody starts clean
 
             this.People.add(person);
@@ -94,7 +101,7 @@ export class App {
                 person.householdIndex = householdIndex;
             }
 
-            if (Stats.getUniform(0, 1) < config.ProportionOfChildren) { //assign children to schools
+            if (person.AgeDemographic == AgeDemographic.Under10 || (person.AgeDemographic == AgeDemographic.Under20 && Stats.getUniform(0, 1) < 0.6)) { //assign children to schools
                 var school = schoolEnvironments.get(Math.trunc(Stats.getUniform(0, schoolEnvironments.size)));
                 this.UsualDaytimeEnvironmentMap.get(school)?.add(person);
                 person.usualDaytimeEnvironment = school;
@@ -256,6 +263,7 @@ export class App {
 
 
         var chance = contactFactor * person2.statusHandler.Infectiousness * person1.susceptability / 24;
+
 
         switch (person1.statusHandler.Status) {
             case Status.Dead: {

@@ -2,7 +2,7 @@ import { EnvironmentType } from "./EnvironmentType";
 export class AppInitConfig {
     PopulationSize: number = 3000;
     NumberOfHouseholds: number = 900;
-    ProportionOfChildren: number = 0.15;
+    //ProportionOfChildren: number = 0.15;
     EnvironmentCounts: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();
     MeanInterpersonalContactFactors: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();
     MeanInterpersonalDeviation: Map<EnvironmentType, number> = new Map<EnvironmentType, number>();

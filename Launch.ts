@@ -8,9 +8,9 @@ function Run() {
 
     var c = new AppInitConfig();
     c.PopulationSize = 50000;
-    c.ProportionOfChildren = 0.3;
+    //c.ProportionOfChildren = 0.3;
     c.SeriousIllnessRatio = 1 / 8; //anticipated serious illness is 1 in 8 of the population 
-    c.ReinfectionProbability = 0.08;
+    c.ReinfectionProbability = 0.008;
     c.RandomInfectionProbability = 0.000005;
     c.PersonalSuceptabilityDeviation = 0.015;
     c.MeanPersonalSusceptability = 0.3;
@@ -48,47 +48,13 @@ function Run() {
 
     c.ChildRetailFactor = 0.1; //children shopping out of school hours
 
-    c.MildSymptomsQuarantineFactor = 0.2; //proportion of mild cases going into quarantine
+    c.MildSymptomsQuarantineFactor = 0.6; //proportion of mild cases going into quarantine
     c.QuarantineWholeHouseholdOnInfection = true; //quarantine whole household if any housemember is quarantined
 
     var app = new App();
     app.Init(c);
 
-    var reporter = (a: App) => {
-
-        var clearCount = 0;
-        var deadCount = 0;
-        var mildCount = 0;
-        var seriousCount = 0;
-        var recoveredCount = 0;
-        var asymptomaticCount = 0;
-
-        a.People.forEach(p => {
-            switch (p.statusHandler.Status) {
-                case Status.Asymptomatic:
-                    asymptomaticCount++;
-                    break;
-                case Status.Clear:
-                    clearCount++;
-                    break;
-                case Status.Dead:
-                    deadCount++;
-                    break;
-                case Status.MildlyIll:
-                    mildCount++;
-                    break;
-                case Status.SeriouslyIll:
-                    seriousCount++;
-                    break;
-                case Status.Recovered:
-                    recoveredCount++;
-                    break;
-            }
-        });
-
-        //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
-        console.log(`${a.Time.Day},${a.Time.Hour},${a.Time.Day *24 + a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
-    };
+   
 
 
     console.log(JSON.stringify(c));
@@ -96,7 +62,6 @@ function Run() {
     console.log();
 
     console.log("Day,Hour,TotalHours,clearCount,asymptomaticCount,mildCount,seriousCount,recoveredCount,deadCount");
-
 
     for (var i = 0; i < 11000; i++) {
         app.TimeElapsed();
@@ -107,3 +72,39 @@ function Run() {
 };
 
 Run();
+
+function reporter (a: App)  {
+
+    var clearCount = 0;
+    var deadCount = 0;
+    var mildCount = 0;
+    var seriousCount = 0;
+    var recoveredCount = 0;
+    var asymptomaticCount = 0;
+
+    a.People.forEach(p => {
+        switch (p.statusHandler.Status) {
+            case Status.Asymptomatic:
+                asymptomaticCount++;
+                break;
+            case Status.Clear:
+                clearCount++;
+                break;
+            case Status.Dead:
+                deadCount++;
+                break;
+            case Status.MildlyIll:
+                mildCount++;
+                break;
+            case Status.SeriouslyIll:
+                seriousCount++;
+                break;
+            case Status.Recovered:
+                recoveredCount++;
+                break;
+        }
+    });
+
+    //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
+    console.log(`${a.Time.Day},${a.Time.Hour},${a.Time.Day *24 + a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
+};
