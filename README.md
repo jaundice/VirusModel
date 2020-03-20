@@ -21,6 +21,20 @@ From skynews interview with ICU doctor
 * 2% Dead
 
 
+from https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf?fbclid=IwAR0vqO4HI3pA-2oV_HdGBQt2t5D0A_ENY6Mhbm4Yi_y88Bbg3Fskew2SYN4 
+<pre>
+Age-group(years),   % symptomatic cases requiring hospitalisation,  % hospitalised cases requiring critical care,   Infection Fatality Ratio
+0 to 9              0.1%                                            5.0%                                            0.002%
+10 to 19            0.3%                                            5.0%                                            0.006%
+20 to 29            1.2%                                            5.0%                                            0.03%
+30 to 39            3.2%                                            5.0%                                            0.08%
+40 to 49            4.9%                                            6.3%                                            0.15%
+50 to 59            10.2%                                           12.2%                                           0.60%
+60 to 69            16.6%                                           27.4%                                           2.2%
+70 to 79            24.3%                                           43.2%                                           5.1%
+80+                 27.3%                                           70.9%                                           9.3% 
+</pre>
+
 * 50% registered cases > 65yo
 * young children mostly asymptomatic
 
@@ -34,7 +48,7 @@ https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-
 * Asthma 5.4m / 200K very severe
 * Autoimmune disorders 4m
 * Diabetes 3.9m
-* Cancer 2.9m ? (from data some will have recovered still at risk?)
+* Cancer 2.9m ? (from data some will have recovered. Still at extra risk?)
 
 
 ## Health Service breakdown
