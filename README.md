@@ -1,18 +1,18 @@
-## VirusModel
+# VirusModel
 Thought excercise in modelling Covid-19 . You can experiment with it at https://jsfiddle.net/jaundice/d4wp6u9k/9/
 
 I'm not a medical professional, but I thought it would be interesting to model interactions between members of a population through home, work, social and other activities over time and how a virus might be transmitted through the population in different senarios. 
 
 I am now trying to enhance the first version with changes over time with policy and behaviour and impact on / from health service
 
-### If YOU have any other pertinent knowledge please add it to a support ticket 
+# If YOU have any other pertinent knowledge please add it to a support ticket 
 (or fork and submit a PR if you know what that is)
 
 
-## Working knowledge
+# Working knowledge
 
 
-# current knowledge: 
+## current knowledge: 
 * probably 80% of infections go unregistered
 
 From skynews interview with ICU doctor
@@ -28,7 +28,7 @@ From skynews interview with ICU doctor
 
 * virus is most contagious before symptoms show and in the first 7 days of symptoms https://www.sciencenews.org/article/coronavirus-most-contagious-before-during-first-week-symptoms 
 
-# underlying health conditions breakdown 
+## underlying health conditions breakdown 
 https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-in-numbers 
 * Heart Disease 7.4m
 * Asthma 5.4m / 200K very severe
@@ -37,20 +37,20 @@ https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-
 * Cancer 2.9m ? (from data some will have recovered still at risk?)
 
 
-# Health Service breakdown
+## Health Service breakdown
 Front line doctors / nurses / beds / ICU, PPE availability
 
 
 
-# Key Delivery workers breakdown
+## Key Delivery workers breakdown
 Medical supplies, food etc
 
 
-# Key Retail workers breakdown
+## Key Retail workers breakdown
 Supermarkets, food, pharmacy
 
 
-# Policy
+## Policy
 * self isolation 
 * social distancing
 * lockdown 
