@@ -5,7 +5,7 @@ I'm not a medical professional, but I thought it would be interesting to model i
 
 I am now trying to enhance the first version with changes over time with policy and behaviour and impact on / from health service
 
-# If YOU have any other pertinent knowledge please add it to a support ticket 
+# If YOU have any other pertinent knowledge please add it to a support ticket on the issues tab
 (or fork and submit a PR if you know what that is)
 
 
