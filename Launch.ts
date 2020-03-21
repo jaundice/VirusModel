@@ -27,6 +27,9 @@ function Run() {
     c.MeanInterpersonalContactFactors.set(EnvironmentType.School, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.School, 0.1);
 
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Retail, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Retail, 0.1);
+
     //number of different types of environment
     c.EnvironmentCounts.set(EnvironmentType.School, 5);
     c.EnvironmentCounts.set(EnvironmentType.Office, 100);
@@ -48,8 +51,8 @@ function Run() {
 
     c.ChildRetailFactor = 0.1; //children shopping out of school hours
 
-    c.MildSymptomsQuarantineFactor = 0.6; //proportion of mild cases going into quarantine
-    c.QuarantineWholeHouseholdOnInfection = true; //quarantine whole household if any housemember is quarantined
+    c.MildSymptomsQuarantineFactor = 0.75; //proportion of mild cases going into quarantine
+    c.QuarantineWholeHouseholdOnInfection = false; //quarantine whole household if any housemember is quarantined
 
     var app = new App();
     app.Init(c);
