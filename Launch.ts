@@ -86,7 +86,7 @@ function reporter (a: App)  {
     var asymptomaticCount = 0;
 
     a.People.forEach(p => {
-        switch (p.statusHandler.Status) {
+        switch (p.StatusHandler.Status) {
             case Status.Asymptomatic:
                 asymptomaticCount++;
                 break;

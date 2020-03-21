@@ -13,6 +13,11 @@ I am now trying to enhance the first version with changes over time with policy 
 
 
 ## current knowledge: 
+https://www.youtube.com/watch?v=PWzbArPgo-o
+* R0 ~3+
+* SI 5-7.5
+
+
 * probably 80% of infections go unregistered
 
 * national employment breakdown by industry is in /usefuldata/emp13feb2020.xls from https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentbyindustryemp13 
@@ -55,6 +60,14 @@ https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-
 * Autoimmune disorders 4m
 * Diabetes 3.9m
 * Cancer 2.9m ? (from data some will have recovered. Still at extra risk?)
+
+## example illness tradjectory in young people
+from https://youtu.be/tmhsNdW24BM?t=584 / https://www.vrt.be/vrtnws/en/2020/03/17/lung-scans-covid-19-thirtysomethings-show-scary-picture/ 
+
+“We’re not only talking about the older generations.  We’re talking about people aged between 30 and 50, who come in here. Frankly speaking lung scans of these patients are scary”.
+
+“They all have the same complaints.  They’ve been home for a week, under the weather with flu.  The flu is over, for two days they feel fine and then they arrive complaining of a dry cough and shortness of breath.  When we measure their oxygen saturation (i.e. the amount of oxygen in their blood, we see particularly low oxygen saturations for their age.”
+
 
 
 ## Health Service breakdown

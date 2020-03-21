@@ -11,58 +11,58 @@ export class Person {
     private _usualDaytimeEnvironment: Environment;
     private _isQuarantined: boolean;
 
-    private _ageDemographic:AgeDemographic;
+    private _ageDemographic: AgeDemographic;
     private _health: Health;
 
-    get AgeDemographic(){
+    get AgeDemographic() {
         return this._ageDemographic;
     }
 
-    get Health():Health{
+    get Health(): Health {
         return this._health;
     }
 
-    get statusHandler(): StatusHandler {
+    get StatusHandler(): StatusHandler {
         return this._statusHandler;
     }
 
-    set statusHandler(statusHandler: StatusHandler) {
+    set StatusHandler(statusHandler: StatusHandler) {
         this._statusHandler = statusHandler;
     }
 
-    get susceptability(): number {
-        return  1.0 - this.Health.HealthScore;  //this._susceptability;
+    get Susceptability(): number {
+        return 1.0 - this.Health.HealthScore;  //this._susceptability;
     }
 
     // set susceptability(susceptability: number) {
     //     this._susceptability = susceptability;
     // }
 
-    get householdIndex(): number {
+    get HouseholdIndex(): number {
         return this._householdIndex;
     }
 
-    set householdIndex(index: number) {
+    set HouseholdIndex(index: number) {
         this._householdIndex = index;
     }
 
-    get usualDaytimeEnvironment() {
+    get UsualDaytimeEnvironment() {
         return this._usualDaytimeEnvironment;
     }
 
-    set usualDaytimeEnvironment(env: Environment) {
+    set UsualDaytimeEnvironment(env: Environment) {
         this._usualDaytimeEnvironment = env;
     }
 
-    get isQuarantined(){
+    get IsQuarantined() {
         return this._isQuarantined;
     }
 
-    set isQuarantined(q: boolean) {
+    set IsQuarantined(q: boolean) {
         this._isQuarantined = q;
     }
 
-    constructor(ageDemographic:AgeDemographic, health:Health){
+    constructor(ageDemographic: AgeDemographic, health: Health) {
         this._health = health;
         this._ageDemographic = ageDemographic;
     }

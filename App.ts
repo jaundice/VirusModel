@@ -87,29 +87,29 @@ export class App {
 
             var person = new Person(ageDemograhic, health);
             //person.susceptability = susceptabilityGenerator;
-            person.statusHandler = new CleanStatusHandler(); //everbody starts clean
+            person.StatusHandler = new CleanStatusHandler(); //everbody starts clean
 
             this.People.add(person);
 
             if (i < config.NumberOfHouseholds) { //ensure each household has a member
                 this.Households.get(i).add(person);
-                person.householdIndex = i;
+                person.HouseholdIndex = i;
             }
             else { //randomly assign remaining people to households
                 var householdIndex = Math.trunc(Stats.getUniform(0, this.Households.size));
                 this.Households.get(householdIndex).add(person);
-                person.householdIndex = householdIndex;
+                person.HouseholdIndex = householdIndex;
             }
 
             if (person.AgeDemographic == AgeDemographic.Under10 || (person.AgeDemographic == AgeDemographic.Under20 && Stats.getUniform(0, 1) < 0.6)) { //assign children to schools
                 var school = schoolEnvironments.get(Math.trunc(Stats.getUniform(0, schoolEnvironments.size)));
                 this.UsualDaytimeEnvironmentMap.get(school)?.add(person);
-                person.usualDaytimeEnvironment = school;
+                person.UsualDaytimeEnvironment = school;
             }
             else { //assign people to other environments
                 var env = nonSchoolEnvironments.get(Math.trunc(Stats.getUniform(0, nonSchoolEnvironments.size)));// for now assign people uniformly across environments
                 this.UsualDaytimeEnvironmentMap.get(env)?.add(person);
-                person.usualDaytimeEnvironment = env;
+                person.UsualDaytimeEnvironment = env;
             }
         }
 
@@ -154,47 +154,46 @@ export class App {
     UpdateQuarantine() { //always updates even if tracking is off in config
         for (var i = 0; i < this.Households.size; i++) {
             var doQuarantine = false;
-            this.Households.get(i).forEach(o => { if (o.isQuarantined) doQuarantine = true; });
+            this.Households.get(i).forEach(o => { if (o.IsQuarantined) doQuarantine = true; });
             this.QuarantinedHouseholds.set(i, doQuarantine);
         }
     }
     UpdateStatusByTick(person: Person) {
 
-        person.statusHandler.Tick();
+        person.StatusHandler.Tick();
 
-        switch (person.statusHandler.Status) {
+        switch (person.StatusHandler.Status) {
             case Status.Dead: {
-                person.isQuarantined = true;
+                person.IsQuarantined = true;
                 return;
             }
 
             case Status.Asymptomatic:
-                if (person.statusHandler.Time.Day > this.Config.AsymptomaticTime) {
-
-                    if (person.usualDaytimeEnvironment.environmentType == EnvironmentType.School) {
+                if (person.StatusHandler.Time.Day > this.Config.AsymptomaticTime) {
+                    if (person.UsualDaytimeEnvironment.environmentType == EnvironmentType.School) {
                         if (Stats.getUniform(0, 1) < this.Config.ChildProgressionFactor) {
-                            person.statusHandler = new MildStatusHandler();
+                            person.StatusHandler = new MildStatusHandler();
                             if (Stats.getUniform(0, 1) < this.Config.MildSymptomsQuarantineFactor) {
-                                person.isQuarantined = true;
+                                person.IsQuarantined = true;
                             }
                         }
                         else {
-                            person.statusHandler = new RecoveredStatusHandler();
-                            person.isQuarantined = false;
+                            person.StatusHandler = new RecoveredStatusHandler();
+                            person.IsQuarantined = false;
                         }
                         return;
                     }
-                    person.statusHandler =
+                    person.StatusHandler =
                         Stats.getUniform(0, 1) < this.Config.SeriousIllnessRatio
                             ? new SeriousStatusHandler()
                             : new MildStatusHandler();
 
-                    if (person.statusHandler.Status == Status.SeriouslyIll) {
-                        person.isQuarantined = true;
+                    if (person.StatusHandler.Status == Status.SeriouslyIll) {
+                        person.IsQuarantined = true;
                     }
-                    if (person.statusHandler.Status == Status.MildlyIll) {
+                    if (person.StatusHandler.Status == Status.MildlyIll) {
                         if (Stats.getUniform(0, 1) < this.Config.MildSymptomsQuarantineFactor) {
-                            person.isQuarantined = true;
+                            person.IsQuarantined = true;
                         }
                     }
                     return;
@@ -202,37 +201,37 @@ export class App {
                 break;
             case Status.SeriouslyIll:
                 {
-                    if ((person.statusHandler.Time.Day > this.Config.RecoveryTime)) {
+                    if ((person.StatusHandler.Time.Day > this.Config.RecoveryTime)) {
                         if (Stats.getUniform(0, 1) < (1.0 / this.Config.DeathRatio)) {
-                            person.statusHandler = new DeadStatusHandler();
-                            person.isQuarantined = true;
+                            person.StatusHandler = new DeadStatusHandler();
+                            person.IsQuarantined = true;
                         }
                         else {
-                            person.statusHandler = new RecoveredStatusHandler();
-                            person.isQuarantined = false;
+                            person.StatusHandler = new RecoveredStatusHandler();
+                            person.IsQuarantined = false;
                         }
                         return;
                     }
                     break;
                 }
             case Status.MildlyIll: {
-                if (person.statusHandler.Time.Day > this.Config.RecoveryTime) {
-                    person.statusHandler = new RecoveredStatusHandler();
-                    person.isQuarantined = false;
+                if (person.StatusHandler.Time.Day > this.Config.RecoveryTime) {
+                    person.StatusHandler = new RecoveredStatusHandler();
+                    person.IsQuarantined = false;
                 }
                 return;
             }
             case Status.Clear: {
-                person.isQuarantined = false;
+                person.IsQuarantined = false;
                 if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability / 24) {
-                    person.statusHandler = new AsymptomaticStatusHandler();
+                    person.StatusHandler = new AsymptomaticStatusHandler();
                 }
                 return;
             }
             case Status.Recovered: {
-                person.isQuarantined = false;
+                person.IsQuarantined = false;
                 if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability * this.Config.ReinfectionProbability / 24) {
-                    person.statusHandler = new AsymptomaticStatusHandler();
+                    person.StatusHandler = new AsymptomaticStatusHandler();
                 }
                 return;
             }
@@ -245,29 +244,29 @@ export class App {
         contactFactor: number /* how much personal interaction people in the environment have*/): StatusHandler {
 
 
-        if (person1.householdIndex != person2.householdIndex && this.Config.QuarantineWholeHouseholdOnInfection) {
-            if (this.QuarantinedHouseholds.get(person1.householdIndex) || this.QuarantinedHouseholds.get(person2.householdIndex))
-                return person1.statusHandler;
+        if (person1.HouseholdIndex != person2.HouseholdIndex && this.Config.QuarantineWholeHouseholdOnInfection) {
+            if (this.QuarantinedHouseholds.get(person1.HouseholdIndex) || this.QuarantinedHouseholds.get(person2.HouseholdIndex))
+                return person1.StatusHandler;
         }
 
         if (person1 === person2) {
-            return person1.statusHandler;
+            return person1.StatusHandler;
         }
 
-        if ((/* neither has the illness */ person1.statusHandler.Status == Status.Clear && person2.statusHandler.Status == Status.Clear)
-            || /* one or other party are quarantined so they dont really meet unless they share a household */ ((person1.isQuarantined || person2.isQuarantined) && (person1.householdIndex != person2.householdIndex))) {
-            return person1.statusHandler;
+        if ((/* neither has the illness */ person1.StatusHandler.Status == Status.Clear && person2.StatusHandler.Status == Status.Clear)
+            || /* one or other party are quarantined so they dont really meet unless they share a household */ ((person1.IsQuarantined || person2.IsQuarantined) && (person1.HouseholdIndex != person2.HouseholdIndex))) {
+            return person1.StatusHandler;
         }
 
 
 
 
-        var chance = contactFactor * person2.statusHandler.Infectiousness * person1.susceptability / 24;
+        var chance = contactFactor * person2.StatusHandler.Infectiousness * person1.Susceptability / 24;
 
 
-        switch (person1.statusHandler.Status) {
+        switch (person1.StatusHandler.Status) {
             case Status.Dead: {
-                return person1.statusHandler;
+                return person1.StatusHandler;
             }
             case Status.Clear:
                 {
@@ -284,7 +283,7 @@ export class App {
             case Status.Asymptomatic: //already infected
             case Status.MildlyIll:
             case Status.SeriouslyIll:
-                return person1.statusHandler;
+                return person1.StatusHandler;
                 break;
         }
 
@@ -328,7 +327,7 @@ export class App {
     private ProcessPeople(people: List<Person>, interpersonalFactor: number) {
         for (var i = 0; i < people.size; i++) {
             for (var k = 0; k < people.size; k++) {
-                people.get(i).statusHandler = this.Transmit(people.get(i), people.get(k), interpersonalFactor);
+                people.get(i).StatusHandler = this.Transmit(people.get(i), people.get(k), interpersonalFactor);
             }
         }
     }
@@ -336,17 +335,17 @@ export class App {
     private DoHomeworkers(people: List<Person>) {
         var homeworkerMap = new Map<number, List<Person>>();
         people.forEach(person => {
-            var set = homeworkerMap.get(person.householdIndex);
-            if (!homeworkerMap.has(person.householdIndex)) {
+            var set = homeworkerMap.get(person.HouseholdIndex);
+            if (!homeworkerMap.has(person.HouseholdIndex)) {
                 set = new List<Person>();
-                homeworkerMap.set(person.householdIndex, set);
+                homeworkerMap.set(person.HouseholdIndex, set);
             }
             set?.add(person);
         });
         homeworkerMap.forEach(workers => {
             if (workers.size == 1) {
                 if (Stats.getUniform(0, 1) < this.Config.RandomInfectionProbability) {
-                    workers.get(0).statusHandler = new AsymptomaticStatusHandler();
+                    workers.get(0).StatusHandler = new AsymptomaticStatusHandler();
                 }
             }
             else {
@@ -376,7 +375,7 @@ export class App {
 
                     var combinedSet = new List<Person>(people);
                     this.People.forEach(person => {
-                        if (person.usualDaytimeEnvironment.environmentType == EnvironmentType.Retail || person.usualDaytimeEnvironment.environmentType == EnvironmentType.Social || person.usualDaytimeEnvironment.environmentType == EnvironmentType.School) {
+                        if (person.UsualDaytimeEnvironment.environmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.environmentType == EnvironmentType.Social || person.UsualDaytimeEnvironment.environmentType == EnvironmentType.School) {
                             // ignore other retail workers, social industry workers and  school children; 
                         }
                         else {
@@ -395,7 +394,7 @@ export class App {
 
                         var combinedSet = new List<Person>(people);
                         this.People.forEach(person => {
-                            if (person.usualDaytimeEnvironment.environmentType == EnvironmentType.Retail || person.usualDaytimeEnvironment.environmentType == EnvironmentType.Social || person.usualDaytimeEnvironment.environmentType == EnvironmentType.School) {
+                            if (person.UsualDaytimeEnvironment.environmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.environmentType == EnvironmentType.Social || person.UsualDaytimeEnvironment.environmentType == EnvironmentType.School) {
                                 // ignore other retail workers, social industry workers and  school children; 
                             }
                             else {
@@ -430,7 +429,7 @@ export class App {
 
                     var combinedSet = new List<Person>(people);
                     this.People.forEach(person => { //school kids shopping
-                        if (person.usualDaytimeEnvironment.environmentType == EnvironmentType.School) {
+                        if (person.UsualDaytimeEnvironment.environmentType == EnvironmentType.School) {
                             if (Stats.getUniform(0, 1) < this.Config.ChildRetailFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Retail)) {
                                 combinedSet.add(person);
                             }
@@ -445,7 +444,7 @@ export class App {
 
                         var combinedSet = new List<Person>(people);
                         this.People.forEach(person => { //schoolkids being social
-                            if (person.usualDaytimeEnvironment.environmentType == EnvironmentType.School) {
+                            if (person.UsualDaytimeEnvironment.environmentType == EnvironmentType.School) {
                                 if (Stats.getUniform(0, 1) < this.Config.SocialLunchFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
                                     combinedSet.add(person);
                                 }
@@ -471,7 +470,7 @@ export class App {
             for (var i = 0; i < this.People.size; i++) {
                 var p: Person = this.People.get(i);
 
-                if (p.usualDaytimeEnvironment.environmentType == EnvironmentType.Retail || p.usualDaytimeEnvironment.environmentType == EnvironmentType.Home || p.usualDaytimeEnvironment.environmentType == EnvironmentType.Office) {
+                if (p.UsualDaytimeEnvironment.environmentType == EnvironmentType.Retail || p.UsualDaytimeEnvironment.environmentType == EnvironmentType.Home || p.UsualDaytimeEnvironment.environmentType == EnvironmentType.Office) {
                     if (Stats.getUniform(0, 1) < this.Config.SocialEveningFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
                         combinedSet.add(p);
                     }
