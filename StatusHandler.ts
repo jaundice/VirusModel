@@ -2,6 +2,8 @@ import { Status } from './Status';
 import { Person } from './Person';
 import { Environment } from './Environment';
 import { Time } from './Time';
+
+
 export abstract class StatusHandler {
     private _status: Status;
     protected _infectiousness:number;
@@ -43,6 +45,22 @@ export class CleanStatusHandler extends StatusHandler{
         //do nothing
     }
 };
+
+export class IncubatorStatusHandler extends StatusHandler{
+    get Infectiousness(): number {
+        return this._infectiousness;
+    }
+
+    constructor(){
+        super(Status.Incubation)
+        this._infectiousness = 0.6;
+    }
+    
+    Tick(){
+        super.Tick();
+        //do nothing
+    }
+}
 
 export class AsymptomaticStatusHandler extends StatusHandler{
 
