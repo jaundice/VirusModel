@@ -1,5 +1,5 @@
 import { Stats } from './Stats';
-import { Health } from './Health';
+import { BasicHealth } from './Health';
 
 export class Demographics {
 
@@ -59,7 +59,7 @@ export class Demographics {
     }
 
 
-    static getRandomHealth(ageDemographic: AgeDemographic): Health {
+    static getRandomHealth(ageDemographic: AgeDemographic): BasicHealth {
         var ageFactor = Demographics.getAgeFactor(ageDemographic);
 
         var heartdisease = ageFactor * Demographics._heartDiseaseProportion < Stats.getUniform(0, 1);
@@ -68,7 +68,7 @@ export class Demographics {
         var diabetes = ageFactor * Demographics._diabetes < Stats.getUniform(0, 1);
         var cancer = ageFactor * Demographics._cancer < Stats.getUniform(0, 1);
 
-        return new Health(heartdisease, asthma, autoImmune, diabetes, cancer);
+        return new BasicHealth(heartdisease, asthma, autoImmune, diabetes, cancer);
 
     }
 

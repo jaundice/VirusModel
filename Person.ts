@@ -1,7 +1,7 @@
 import { StatusHandler } from "./StatusHandler";
 import { Environment } from './Environment';
 import { AgeDemographic } from './Demographic';
-import { Health } from './Health';
+import { BasicHealth } from './Health';
 
 
 export class Person {
@@ -12,13 +12,13 @@ export class Person {
     private _isQuarantined: boolean;
 
     private _ageDemographic: AgeDemographic;
-    private _health: Health;
+    private _health: BasicHealth;
 
     get AgeDemographic() {
         return this._ageDemographic;
     }
 
-    get Health(): Health {
+    get Health(): BasicHealth {
         return this._health;
     }
 
@@ -62,7 +62,7 @@ export class Person {
         this._isQuarantined = q;
     }
 
-    constructor(ageDemographic: AgeDemographic, health: Health) {
+    constructor(ageDemographic: AgeDemographic, health: BasicHealth) {
         this._health = health;
         this._ageDemographic = ageDemographic;
     }

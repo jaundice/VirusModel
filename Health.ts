@@ -1,4 +1,4 @@
-export class Health {
+export class BasicHealth {
     private _heartdisease: boolean;
     private _asthma: boolean;
     private _autoImmune: boolean;
