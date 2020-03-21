@@ -63,6 +63,7 @@ export class Environments {
         else if (u < manufaturingRatio + wholesaleRetail + transport + education + outdoors) return EnvironmentType.Outdoors;
         else if (u < manufaturingRatio + wholesaleRetail + transport + education + outdoors + office) return EnvironmentType.Office;
         else if (u < manufaturingRatio + wholesaleRetail + transport + education + outdoors + office + entertainment) return EnvironmentType.Social;
+        else if (u < manufaturingRatio + wholesaleRetail + transport + education + outdoors + office + entertainment + health) return EnvironmentType.Hospital;
         else return EnvironmentType.Home;
 
     }
