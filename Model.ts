@@ -3,11 +3,13 @@ import { Policies } from "./Policies";
 import { Triggers } from "./Triggers";
 import { RunningConfig } from "./RunningConfig";
 import { Result } from "./Result";
+import { Trigger } from "./Trigger";
+import { Policy } from "./Policy";
 
 export class Model {
     private _healthService: HealthService;
-    private _policies: Policies;
-    private _triggers: Triggers;
+    private _policies: Policies = new Policies();
+    private _triggers: Triggers = new Triggers();
     private _runningConfig: RunningConfig;
 
     private _result: Result;
@@ -20,14 +22,25 @@ export class Model {
         return this._runningConfig;
     }
 
-    UpdateModel() {
+    constructor(healthService: HealthService, triggers: Trigger[], policies: Policy[]) {
+        this._healthService = healthService;
+        for (var i = 0; i < triggers.length; i++) {
+            this._triggers.AddTrigger(triggers[i]);
+        }
+        for (var j = 0; j < policies.length; j++) {
+            this._policies.AddPolicy(policies[j]);
+        }
+
+    }
+
+    private UpdateModel() {
         this._triggers.FireTriggers(this);
         this._runningConfig = this._policies.ApplyPolicies(this._runningConfig);
         this._healthService.Update(this);
         this._healthService.UpdateFactors();
     }
 
-    UpdateResult() {
+    private UpdateResult() {
 
     }
 
