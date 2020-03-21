@@ -21,7 +21,7 @@ export class Demographics {
     /* naieve attempt at skewing illness towards the older people. 
     This is will alter the overall profile but might represent different age ranges
     better where there is no public data I can find */
-    private static getAgeFactor(ageDemographic: AgeDemographic): number {
+    private static GetAgeFactor(ageDemographic: AgeDemographic): number {
 
         var f: number;
         switch (ageDemographic) {
@@ -59,8 +59,8 @@ export class Demographics {
     }
 
 
-    static getRandomHealth(ageDemographic: AgeDemographic): BasicHealth {
-        var ageFactor = Demographics.getAgeFactor(ageDemographic);
+    static GetRandomHealth(ageDemographic: AgeDemographic): BasicHealth {
+        var ageFactor = Demographics.GetAgeFactor(ageDemographic);
 
         var heartdisease = ageFactor * Demographics._heartDiseaseProportion < Stats.getUniform(0, 1);
         var asthma = ageFactor * Demographics._asthma < Stats.getUniform(0, 1);

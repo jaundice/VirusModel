@@ -3,5 +3,8 @@ export enum EnvironmentType {
     Office,
     School,
     Retail,
-    Social
+    Social,
+    Factory,
+    Logistics,
+    Outdoors,
 };

@@ -1,4 +1,6 @@
 import { RunningConfig } from './RunningConfig';
+import { Person } from './Person';
+import { Environment } from './Environment';
 
 export abstract class Policy {
     private _isActive: boolean;
@@ -10,14 +12,24 @@ export abstract class Policy {
         this._isActive = active;
     }
 
-    ModifyRunningConfig(runningConfig:RunningConfig){
-        if(!this.IsActive){
+    ModifyRunningConfig(runningConfig: RunningConfig) {
+        if (!this.IsActive) {
             return runningConfig;
         }
 
         return this.ModifyRunningConfigInternal(runningConfig);
     }
 
-    protected abstract  ModifyRunningConfigInternal(runningConfig:RunningConfig ): RunningConfig; 
+    CanPersonBeInEnvironment(person: Person, environment: Environment): boolean {
+        if (!this.IsActive)
+            return true;
+
+        return this.CanPersonBeInEnvironmentInternal(person, environment);
+    }
+
+    protected abstract ModifyRunningConfigInternal(runningConfig: RunningConfig): RunningConfig;
+
+    protected abstract CanPersonBeInEnvironmentInternal(person: Person, environment: Environment): boolean;
+
 
 }

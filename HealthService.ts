@@ -30,7 +30,7 @@ export class HealthService {
         return this._availableMedicalStaff;
     }
 
-    get AvailableBed() {
+    get AvailableBeds() {
         return this._availableBeds;
     }
 
@@ -69,7 +69,7 @@ export class HealthService {
     //might need a better weighting 
     UpdateFactors() {
         var medicFactor = Math.max(1, this.PatientDemand / (this.AvailableMedicalStaff * this._requiredPatientToMedicFactor));
-        var bedFactor = Math.max(1, this.BedDemand / this.AvailableBed);
+        var bedFactor = Math.max(1, this.BedDemand / this.AvailableBeds);
         var icuFactor = Math.max(1, this.ICUDemand / this.AvailableICU);
 
         this._medicsCritical = medicFactor > 1;
@@ -79,7 +79,7 @@ export class HealthService {
         this._morbityFactor = Math.sqrt((medicFactor * medicFactor) + (bedFactor * bedFactor) + (icuFactor * icuFactor))
     }
 
-    Update(model:Model){
+    UpdateProperties(model:Model){
         
     }
 

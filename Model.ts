@@ -36,7 +36,7 @@ export class Model {
     private UpdateModel() {
         this._triggers.FireTriggers(this);
         this._runningConfig = this._policies.ApplyPolicies(this._runningConfig);
-        this._healthService.Update(this);
+        this._healthService.UpdateProperties(this);
         this._healthService.UpdateFactors();
     }
 
