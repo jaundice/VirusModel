@@ -20,16 +20,16 @@ export abstract class Policy {
         return this.ModifyRunningConfigInternal(runningConfig);
     }
 
-    CanPersonBeInEnvironment(person: Person, environment: Environment): boolean {
+    CanPeopleMeetInEnvironment(person1: Person, person2: Person, environment: Environment): boolean {
         if (!this.IsActive)
             return true;
 
-        return this.CanPersonBeInEnvironmentInternal(person, environment);
+        return this.CanPeopleMeetInEnvironmentInternal(person1, person2, environment);
     }
 
     protected abstract ModifyRunningConfigInternal(runningConfig: RunningConfig): RunningConfig;
 
-    protected abstract CanPersonBeInEnvironmentInternal(person: Person, environment: Environment): boolean;
+    protected abstract CanPeopleMeetInEnvironmentInternal(person1: Person, person2: Person, environment: Environment): boolean;
 
 
 }
