@@ -7,6 +7,13 @@ export class Time {
     get Hour() {
         return this._hour;
     }
+    set Day(d: number) {
+        this._day = d;
+    }
+
+    set Hour(h: number) {
+        this._hour = h;
+    }
     Reset() {
         this._day = 0;
         this._hour = 0;

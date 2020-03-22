@@ -28,6 +28,10 @@ export class Model {
         return this._runningConfig;
     }
 
+    get HealthService(){
+        return this._healthService;
+    }
+
     constructor(healthService: HealthService, triggers: Trigger[], policies: Policy[]) {
         this._healthService = healthService;
         for (var i = 0; i < triggers.length; i++) {
