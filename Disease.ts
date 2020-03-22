@@ -50,16 +50,25 @@ export class Disease {
         d.Time.Tick();
 
         switch (d.Status) {
-            case Status.Clear: {
-                d.Infectiousness = 0;
-                break;
-            }
+
+            //case Status.Dead:
+            case Status.Clear:
             case Status.Recovered: {
                 d.Infectiousness = 0;
                 break;
             }
             case Status.Incubation: {
                 d.Infectiousness = 1;
+                if(d.Time.Day > Stats.getGaussianRandomGenerator(7, 1.5)()){
+                    if(Stats.getUniform(0,1)> 0.8){
+                        d.Status = Status.MildlyIll;
+                        d.Infectiousness = 1;
+                    }
+                    else{
+                        d.Status = Status.Asymptomatic;
+                        d.Infectiousness =1;
+                    }
+                }
                 break;
             }
             case Status.Asymptomatic: {
@@ -67,6 +76,7 @@ export class Disease {
                     if ((d.Time.Day > 14) || Stats.getUniform(0, 1) * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
                         d.Status = Status.Recovered;
                         d.Infectiousness = 0;
+                        break;
                     }
                 }
                 else if (Stats.getUniform(0, 1) * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
@@ -77,6 +87,7 @@ export class Disease {
                     d.Infectiousness = 1;
                     d.Time.Day = day;
                     d.Time.Hour = hour;
+                    break;
                 }
 
                 d.Infectiousness = 1;
@@ -108,12 +119,14 @@ export class Disease {
                     if (Stats.getUniform(0, 1) * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor > person.Health.HealthScore) {
                         d.Status = Status.Dead;
                         d.Infectiousness = 0;
+                        break;
                     }
                 }
 
-                if(d.Time.Day > 14){
+                else if(d.Time.Day > 14){
                     d.Status = Status.Recovered;
                     d.Infectiousness = 0;
+                    break;
                 }
 
                 d.Infectiousness = 0.5;
