@@ -5,14 +5,20 @@ import { RunningConfig } from "./RunningConfig";
 import { Result } from "./Result";
 import { Trigger } from "./Trigger";
 import { Policy } from "./Policy";
+import { Households } from "./Household";
 
 export class Model {
     private _healthService: HealthService;
     private _policies: Policies = new Policies();
     private _triggers: Triggers = new Triggers();
     private _runningConfig: RunningConfig;
+    private _households:Households = new Households();
 
     private _result: Result;
+
+    get Households(){
+        return this._households;
+    }
 
     get Result(): Result {
         return this._result;

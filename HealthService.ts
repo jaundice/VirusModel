@@ -4,12 +4,13 @@ export class HealthService {
     private _availableMedicalStaff: number;
     private _availableBeds: number;
     private _availableICU: number;
+    private _availableVentilators: number
 
 
     private _patientDemand: number;
     private _bedDemand: number;
     private _icuDemand: number;
-
+    private _ventilatorDemand: number;
 
     private _morbityFactor: number = 1;
 
@@ -19,11 +20,13 @@ export class HealthService {
     private _medicsCritical: boolean;
     private _bedsCritical: boolean;
     private _icuCritical: boolean;
+    private _ventilatorsCritical: boolean;
 
-    constructor(availableMedicalStaff: number, availableBeds: number, availableICU: number) {
+    constructor(availableMedicalStaff: number, availableBeds: number, availableICU: number, availableVentilators: number) {
         this._availableMedicalStaff = availableMedicalStaff;
         this._availableBeds = availableBeds;
         this._availableICU = availableICU;
+        this._availableVentilators = availableVentilators;
     }
 
     get AvailableMedicalStaff() {
@@ -36,6 +39,10 @@ export class HealthService {
 
     get AvailableICU() {
         return this._availableICU;
+    }
+
+    get AvailableVentilators() {
+        return this._availableVentilators;
     }
 
     get MorbidityFactor() {
@@ -54,6 +61,10 @@ export class HealthService {
         return this._icuDemand;
     }
 
+    get VentilatorDemand() {
+        return this._ventilatorDemand;
+    }
+
     get MedicsCritical() {
         return this._medicsCritical;
     }
@@ -66,21 +77,30 @@ export class HealthService {
         return this._icuCritical;
     }
 
+    get VentilatorsCritical() {
+        return this._ventilatorsCritical;
+    }
+
     //might need a better weighting 
     UpdateFactors() {
         var medicFactor = Math.max(1, this.PatientDemand / (this.AvailableMedicalStaff * this._requiredPatientToMedicFactor));
         var bedFactor = Math.max(1, this.BedDemand / this.AvailableBeds);
         var icuFactor = Math.max(1, this.ICUDemand / this.AvailableICU);
-
+        var ventilatorFactor = Math.max(1, this.VentilatorDemand / this.AvailableVentilators);
         this._medicsCritical = medicFactor > 1;
         this._bedsCritical = bedFactor > 1;
         this._icuCritical = icuFactor > 1;
-
-        this._morbityFactor = Math.sqrt((medicFactor * medicFactor) + (bedFactor * bedFactor) + (icuFactor * icuFactor))
+        this._ventilatorsCritical = ventilatorFactor > 1;
+        this._morbityFactor = Math.sqrt(
+                                        (medicFactor * medicFactor) + 
+                                        (bedFactor * bedFactor) + 
+                                        (icuFactor * icuFactor) + 
+                                        (ventilatorFactor * ventilatorFactor)
+                                        )/ 2; /* divided by 2 to give morbidity factor of 1 if all other factors are also 1 */
     }
 
-    UpdateProperties(model:Model){
-        
+    UpdateProperties(model: Model) {
+
     }
 
 }

@@ -2,6 +2,8 @@ import { StatusHandler } from "./StatusHandler";
 import { Environment } from './Environment';
 import { AgeDemographic } from './Demographic';
 import { BasicHealth } from './Health';
+import { Disease } from "./Disease";
+import { Status } from "./Status";
 
 
 export class Person {
@@ -13,6 +15,21 @@ export class Person {
 
     private _ageDemographic: AgeDemographic;
     private _health: BasicHealth;
+    private _isKeyWorker:boolean;
+
+    private _disease:Disease = new Disease(Status.Clear);
+    
+    get Disease():Disease{
+        return this._disease;
+    }
+
+    set Disease(disease:Disease){
+        this._disease = disease;
+    }
+
+    get IsKeyWorker(){
+        return this._isKeyWorker;
+    }
 
     get AgeDemographic() {
         return this._ageDemographic;

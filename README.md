@@ -61,6 +61,15 @@ https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-
 * Diabetes 3.9m
 * Cancer 2.9m ? (from data some will have recovered. Still at extra risk?)
 
+
+## prognois
+https://youtu.be/rdoN_XsHWBI?t=1505
+
+cardio vascular +10.6%
+diabetes +6.3%
+pulmanory +7.3%
+cancer/ immuno suppression +5.6%
+
 ## example illness tradjectory in young people
 from https://youtu.be/tmhsNdW24BM?t=584 / https://www.vrt.be/vrtnws/en/2020/03/17/lung-scans-covid-19-thirtysomethings-show-scary-picture/ 
 
