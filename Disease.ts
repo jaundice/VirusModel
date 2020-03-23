@@ -59,14 +59,14 @@ export class Disease {
             }
             case Status.Incubation: {
                 d.Infectiousness = 1;
-                if(d.Time.Day > Stats.getGaussianRandomGenerator(7, 1.5)()){
-                    if(Stats.getUniform(0,1)> 0.8){
+                if (d.Time.Day > Stats.getGaussianRandomGenerator(7, 1.5)()) {
+                    if (Stats.getUniform(0, 1) > 0.8) {
                         d.Status = Status.MildlyIll;
                         d.Infectiousness = 1;
                     }
-                    else{
+                    else {
                         d.Status = Status.Asymptomatic;
-                        d.Infectiousness =1;
+                        d.Infectiousness = 1;
                     }
                 }
                 break;
@@ -90,7 +90,8 @@ export class Disease {
                     break;
                 }
 
-                d.Infectiousness = 1;
+
+                d.Infectiousness = d.Time.Day < 7 ? 1 : 0.6;
                 break;
 
             }
@@ -123,7 +124,7 @@ export class Disease {
                     }
                 }
 
-                else if(d.Time.Day > 14){
+                else if (d.Time.Day > 14) {
                     d.Status = Status.Recovered;
                     d.Infectiousness = 0;
                     break;
@@ -134,9 +135,8 @@ export class Disease {
 
             }
         }
-
-        throw "Not implemented";
     }
+
     private static AgeFactor(ageDemographic: AgeDemographic) {
         var af: number = 0;
         switch (ageDemographic) {
@@ -158,7 +158,6 @@ export class Disease {
                 af = 0.8; break;
             default:
                 af = 0.9; break;
-
         }
 
         return af * af;

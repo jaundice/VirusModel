@@ -312,7 +312,7 @@ export class App {
                     break;
                 }
                 case EnvironmentType.Retail:
-                case EnvironmentType.Social:
+                case EnvironmentType.Entertainment:
                 case EnvironmentType.Office:
                 case EnvironmentType.School: {
 
@@ -375,7 +375,7 @@ export class App {
 
                     var combinedSet = new List<Person>(people);
                     this.People.forEach(person => {
-                        if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Social || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
+                        if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
                             // ignore other retail workers, social industry workers and  school children; 
                         }
                         else {
@@ -389,16 +389,16 @@ export class App {
                     this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
                     break;
                 }
-                case EnvironmentType.Social:
+                case EnvironmentType.Entertainment:
                     {
 
                         var combinedSet = new List<Person>(people);
                         this.People.forEach(person => {
-                            if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Social || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
+                            if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
                                 // ignore other retail workers, social industry workers and  school children; 
                             }
                             else {
-                                if (Stats.getUniform(0, 1) < this.Config.SocialLunchFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
+                                if (Stats.getUniform(0, 1) < this.Config.SocialLunchFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Entertainment)) {
                                     combinedSet.add(person);
                                 }
                             }
@@ -439,13 +439,13 @@ export class App {
                     this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
                     break;
                 }
-                case EnvironmentType.Social:
+                case EnvironmentType.Entertainment:
                     {
 
                         var combinedSet = new List<Person>(people);
                         this.People.forEach(person => { //schoolkids being social
                             if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
-                                if (Stats.getUniform(0, 1) < this.Config.SocialLunchFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
+                                if (Stats.getUniform(0, 1) < this.Config.SocialLunchFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Entertainment)) {
                                     combinedSet.add(person);
                                 }
                             }
@@ -461,7 +461,7 @@ export class App {
     DoNightime() {
         this.DoHousehold();
 
-        this.Environments.get(EnvironmentType.Social)?.forEach(env => {
+        this.Environments.get(EnvironmentType.Entertainment)?.forEach(env => {
             var workers = this.UsualDaytimeEnvironmentMap.get(env);
             var combinedSet = new List<Person>(workers);
 
@@ -471,7 +471,7 @@ export class App {
                 var p: Person = this.People.get(i);
 
                 if (p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Home || p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Office) {
-                    if (Stats.getUniform(0, 1) < this.Config.SocialEveningFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Social)) {
+                    if (Stats.getUniform(0, 1) < this.Config.SocialEveningFactor / this.Config.EnvironmentCounts.get(EnvironmentType.Entertainment)) {
                         combinedSet.add(p);
                     }
                 }

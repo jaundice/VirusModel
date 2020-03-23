@@ -3,7 +3,7 @@ export enum EnvironmentType {
     Office,
     School,
     Retail,
-    Social,
+    Entertainment,
     Factory,
     Logistics,
     Outdoors,

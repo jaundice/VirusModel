@@ -21,8 +21,8 @@ function Run() {
     c.MeanInterpersonalContactFactors.set(EnvironmentType.Office, 0.3);
     c.MeanInterpersonalDeviation.set(EnvironmentType.Office, 0.15);
 
-    c.MeanInterpersonalContactFactors.set(EnvironmentType.Social, 0.4);
-    c.MeanInterpersonalDeviation.set(EnvironmentType.Social, 0.2);
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Entertainment, 0.4);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Entertainment, 0.2);
 
     c.MeanInterpersonalContactFactors.set(EnvironmentType.School, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.School, 0.1);
@@ -34,7 +34,7 @@ function Run() {
     c.EnvironmentCounts.set(EnvironmentType.School, 5);
     c.EnvironmentCounts.set(EnvironmentType.Office, 100);
     c.EnvironmentCounts.set(EnvironmentType.Retail, 20);
-    c.EnvironmentCounts.set(EnvironmentType.Social, 20);
+    c.EnvironmentCounts.set(EnvironmentType.Entertainment, 20);
     c.EnvironmentCounts.set(EnvironmentType.Home, 1); //dummy: represents homeworkers, housebound, stay at home parents etc
 
 
