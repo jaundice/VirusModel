@@ -9,7 +9,7 @@ export class List<T> implements Iterable<T>{
         }
 
     }
-    
+
     [Symbol.iterator](): Iterator<T, void, T> {
         var arr = this.items;
         function* iter() {
@@ -67,6 +67,14 @@ export class List<T> implements Iterable<T>{
                 r++;
         });
         return r;
+    }
+
+    aggregate<U>(seed: U, callback: (t: T, u: U) => U): U {
+        var res = seed;
+        this.forEach(p => {
+            res = callback(p, res);
+        });
+        return res;
     }
 };
 

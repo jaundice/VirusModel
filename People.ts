@@ -3,8 +3,17 @@ import { Person } from "./Person";
 import { AgeDemographic } from "./Demographic";
 import { EnvironmentType } from "./EnvironmentType";
 import { Status } from "./Status";
+import { Model } from "./Model";
+import { Disease } from "./Disease";
 
 export class People {
+
+
+    UpdateDiseaseProgression(model: Model) {
+        this.AllPeople.forEach(p => {
+            Disease.UpdateDiseaseProgression(p, model);
+        });
+    }
 
     private _people: List<Person>;
 
@@ -82,7 +91,7 @@ export class People {
             return filters.every(a => a(p));
         };
     }
-    
+
     static CombineAnyFilters(filters: ((p: Person) => boolean)[]): (p: Person) => boolean {
         return (p: Person) => {
             return filters.some(a => a(p));

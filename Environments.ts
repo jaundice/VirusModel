@@ -53,6 +53,11 @@ var entertainment = accomodationFood;
 export class Environments {
     private _allEnvironments: List<Environment> = new List<Environment>();
     private _allKeyEnvironments: List<Environment> = new List<Environment>();
+    private _environmentMap:Map<EnvironmentType, List<Environment>>;
+
+    GetEnvironmentsByType(type:EnvironmentType):List<Environment>{
+        return this._environmentMap.get(type);
+    }
 
     static GetRandomEnvironment():EnvironmentType {
         var u = Stats.getUniform(0, 1);

@@ -1,38 +1,40 @@
 # VirusModel
-Thought excercise in modelling Covid-19 . You can experiment with it at https://jsfiddle.net/jaundice/d4wp6u9k/9/ (This is my original model)
+
+Thought excercise in modelling Covid-19 . You can experiment with it at <https://jsfiddle.net/jaundice/d4wp6u9k/9/> (This is my original model)
 
 I'm not a medical professional, but I thought it would be interesting to model interactions between members of a population through home, work, social and other activities over time and how a virus might be transmitted through the population in different senarios. 
 
 I am now trying to enhance the first version with changes over time with policy and behaviour and impact on / from health service
 
-# If YOU have any other pertinent knowledge please add it to a support ticket on the issues tab
+## If YOU have any other pertinent knowledge please add it to a support ticket on the issues tab
+
 (or fork and submit a PR if you know what that is)
 
+## Working knowledge
 
-# Working knowledge
+### current knowledge:
 
+<https://www.youtube.com/watch?v=PWzbArPgo-o>
 
-## current knowledge: 
-https://www.youtube.com/watch?v=PWzbArPgo-o
 * R0 ~3+
 * SI 5-7.5
 
-
 * probably 80% of infections go unregistered
+* national employment breakdown by industry is in /usefuldata/emp13feb2020.xls from <https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentbyindustryemp13>
 
-* national employment breakdown by industry is in /usefuldata/emp13feb2020.xls from https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentbyindustryemp13 
+from <https://www.worldometers.info/demographics/uk-demographics/>
 
-from https://www.worldometers.info/demographics/uk-demographics/
 * UK population 67886011
-* 82.9 % urban 
+* 82.9 % urban
 
 From skynews interview with ICU doctor
+
 * 10% hospitalised
 * 4% ICU
 * 2% Dead
 
+from <https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf?fbclid=IwAR0vqO4HI3pA-2oV_HdGBQt2t5D0A_ENY6Mhbm4Yi_y88Bbg3Fskew2SYN4> 
 
-from https://www.imperial.ac.uk/media/imperial-college/medicine/sph/ide/gida-fellowships/Imperial-College-COVID19-NPI-modelling-16-03-2020.pdf?fbclid=IwAR0vqO4HI3pA-2oV_HdGBQt2t5D0A_ENY6Mhbm4Yi_y88Bbg3Fskew2SYN4 
 <pre>
 Age-group(years),   % symptomatic cases requiring hospitalisation,  % hospitalised cases requiring critical care,   Infection Fatality Ratio
 0 to 9              0.1%                                            5.0%                                            0.002%
@@ -49,60 +51,63 @@ Age-group(years),   % symptomatic cases requiring hospitalisation,  % hospitalis
 * 50% registered cases > 65yo
 * young children mostly asymptomatic
 
-* median 5.1 day incubation, 97.5% within 11.5 days.  max up to 2 weeks https://annals.org/aim/fullarticle/2762808/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported
+* median 5.1 day incubation, 97.5% within 11.5 days.  max up to 2 weeks <https://annals.org/aim/fullarticle/2762808/incubation-period-coronavirus-disease-2019-covid-19-from-publicly-reported>
 
-* virus is most contagious before symptoms show and in the first 7 days of symptoms https://www.sciencenews.org/article/coronavirus-most-contagious-before-during-first-week-symptoms 
+* virus is most contagious before symptoms show and in the first 7 days of symptoms <https://www.sciencenews.org/article/coronavirus-most-contagious-before-during-first-week-symptoms>
 
-## underlying health conditions breakdown 
-https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-in-numbers 
+### underlying health conditions breakdown
+
+<https://www.theguardian.com/uk-news/2020/mar/17/the-uk-new-coronavirus-measures-in-numbers>
+
 * Heart Disease 7.4m
 * Asthma 5.4m / 200K very severe
 * Autoimmune disorders 4m
 * Diabetes 3.9m
 * Cancer 2.9m ? (from data some will have recovered. Still at extra risk?)
 
+### prognois
 
-## prognois
-https://youtu.be/rdoN_XsHWBI?t=1505
+<https://youtu.be/rdoN_XsHWBI?t=1505>
 
 cardio vascular +10.6%
 diabetes +6.3%
 pulmanory +7.3%
 cancer/ immuno suppression +5.6%
 
-## example illness tradjectory in young people
-from https://youtu.be/tmhsNdW24BM?t=584 / https://www.vrt.be/vrtnws/en/2020/03/17/lung-scans-covid-19-thirtysomethings-show-scary-picture/ 
+### example illness tradjectory in young people
+
+from <https://youtu.be/tmhsNdW24BM?t=584> / <https://www.vrt.be/vrtnws/en/2020/03/17/lung-scans-covid-19-thirtysomethings-show-scary-picture/>
 
 “We’re not only talking about the older generations.  We’re talking about people aged between 30 and 50, who come in here. Frankly speaking lung scans of these patients are scary”.
 
 “They all have the same complaints.  They’ve been home for a week, under the weather with flu.  The flu is over, for two days they feel fine and then they arrive complaining of a dry cough and shortness of breath.  When we measure their oxygen saturation (i.e. the amount of oxygen in their blood, we see particularly low oxygen saturations for their age.”
 
+### Health Service breakdown
 
-
-## Health Service breakdown
 Front line doctors / nurses / beds / ICU, PPE availability
 
+### Key Delivery workers breakdown
 
-
-## Key Delivery workers breakdown
 Medical supplies, food etc
 
+### Key Retail workers breakdown
 
-## Key Retail workers breakdown
 Supermarkets, food, pharmacy
 
+### Policy
 
-## Policy
-* self isolation 
+* self isolation
 * social distancing
-* lockdown 
+* lockdown
 * medic isolation
 * virus testing
 * antibody testing
 * ...
 
-## Age Demographics
-https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest#main-facts-and-figures
+### Age Demographics
+
+<https://www.ethnicity-facts-figures.service.gov.uk/uk-population-by-ethnicity/demographics/age-groups/latest#main-facts-and-figures>
+
 <pre>
 Age         Percentage
 0-4         6.2
@@ -125,8 +130,7 @@ Age         Percentage
 85+         2.2
 </pre>
 
-
-# Things to model:
+## Things to model:
 
 * population age?
 * underlying population health

@@ -124,7 +124,7 @@ export class Disease {
                     }
                 }
 
-                else if (d.Time.Day > 14) {
+                else if (d.Time.Day > 21) {
                     d.Status = Status.Recovered;
                     d.Infectiousness = 0;
                     break;

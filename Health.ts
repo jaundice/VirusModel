@@ -12,22 +12,23 @@ export class BasicHealth {
         this._diabetes = diabetes;
         this._cancer = cancer;
         var neg: number = 0;
+
         if (this.HasAsthma) {
-            neg += 100;
+            neg += 1.073 * 1.073;
         }
-        if (this.HasAutoImmune) {
-            neg += 100;
+        if (this.HasAutoImmune || this.HasCancer) {
+            neg += 1.056 * 1.056;
         }
-        if (this.HasCancer) {
-            neg += 100;
-        }
+        // if (this.HasCancer) {
+        //     neg += 100;
+        // }
         if (this.HasDiabetes) {
-            neg += 100;
+            neg += 1.063 * 1.063;
         }
         if (this.HasHeartDisease) {
-            neg += 100;
+            neg += 1.106 * 1.106;
         }
-        this._healthScore = 1 - (Math.sqrt(neg) / 22.36);
+        this._healthScore = 1 - (Math.sqrt(neg) / 2.1493);
     }
     /* breaking these out in case futher info becomes available about relative outcomes */
     get HasCancer(): boolean {
