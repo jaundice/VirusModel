@@ -3,7 +3,7 @@ import { Policies } from "./Policies";
 import { Triggers } from "./Triggers";
 import { RunningConfig } from "./RunningConfig";
 import { Result } from "./Result";
-import { Trigger } from "./Trigger";
+import { TriggerBase } from "./Trigger";
 import { Policy } from "./Policy";
 import { Households } from "./Household";
 import { People } from "./People";
@@ -62,7 +62,7 @@ export class Model {
         return this._environments;
     }
 
-    constructor(healthService: HealthService, triggers: Trigger[], policies: Policy[], people: People) {
+    constructor(healthService: HealthService, triggers: TriggerBase[], policies: Policy[], people: People) {
         this._healthService = healthService;
         this._people = people;
         for (var i = 0; i < triggers.length; i++) {
@@ -84,13 +84,18 @@ export class Model {
     }
 
     private UpdateResult() {
-
+        var res = new Result()
+        this._people.AllPeople.aggregate(res, (a, b) => {
+            b.Counts.set(a.Disease.Status, b.Counts.get(a.Disease.Status) + 1);
+            return res;
+        });
+        this._result = res;
     }
 
     TimeElapsed() {
-        this.UpdateModel()
+        this.UpdateModel();
         this.DoTimeInterval();
-        this.UpdateResult()
+        this.UpdateResult();
     }
 
 
@@ -124,33 +129,37 @@ export class Model {
     Transmit(
         person1: Person,
         person2: Person,
-        contactFactor: number /* how much personal interaction people in the environment have*/) {
+        environment: Environment) {
 
 
         if (person1 === person2) {
             return;
         }
 
-        if ((/* neither has the illness */ person1.Disease.Status == Status.Clear && person2.Disease.Status == Status.Clear)
-            || /* one or other party are quarantined so they dont really meet unless they share a household */
-            ((person1.IsQuarantined || person2.IsQuarantined) && (person1.HouseholdIndex != person2.HouseholdIndex))) {
+        if (!this._policies.CanPeopleMeetInEnvironment(person1, person2, this, environment))
             return;
-        }
+
+        //if ((/* neither has the illness */ person1.Disease.Status == Status.Clear && person2.Disease.Status == Status.Clear)
+        //    || /* one or other party are quarantined so they dont really meet unless they share a household */
+        //    ((person1.IsQuarantined || person2.IsQuarantined) && (person1.HouseholdIndex != person2.HouseholdIndex))) {
+        //    return;
+        //}
+
+        var chance = environment.InterpersonalContactFactor
+            * this._runningConfig.InterpersonalContactFactorModifier
+            * person2.StatusHandler.Infectiousness
+            * person1.Susceptability / 24;
 
 
-
-
-        var chance = contactFactor * person2.StatusHandler.Infectiousness * person1.Susceptability / 24;
-
-
-        switch (person1.StatusHandler.Status) {
+        switch (person1.Disease.Status) {
             case Status.Dead: {
-                return person1.StatusHandler;
+                return;
             }
             case Status.Clear:
                 {
                     if (Stats.getUniform(0, 1) < chance) {
                         person1.Disease.Status = Status.Incubation;
+                        person1.Disease.Infectiousness = 1;
                         return;
                     }
                 }
@@ -158,6 +167,7 @@ export class Model {
                 {
                     if (Stats.getUniform(0, 1) < chance * this._runningConfig.ReinfectionProbability) {
                         person1.Disease.Status = Status.Incubation;
+                        person1.Disease.Infectiousness = 1;
                         return;
                     }
                 }
@@ -165,7 +175,6 @@ export class Model {
             case Status.MildlyIll:
             case Status.SeriouslyIll:
                 return;
-                break;
         }
 
 
@@ -175,9 +184,8 @@ export class Model {
     DoHousehold() {
 
         this.Households.Households.forEach(household => {
-            this.ProcessPeople(household.Members, this.Environments.GetEnvironmentsByType(EnvironmentType.Home)?.get(0)?.InterpersonalContactFactor);
+            this.ProcessPeople(household.Members, this.Environments.GetEnvironmentsByType(EnvironmentType.Home)?.get(0));
         });
-
 
     }
 
@@ -197,7 +205,7 @@ export class Model {
                 case EnvironmentType.Office:
                 case EnvironmentType.School: {
 
-                    this.ProcessPeople(people, environment.InterpersonalContactFactor);
+                    this.ProcessPeople(people, environment);
                     break;
                 }
             }
@@ -205,10 +213,10 @@ export class Model {
 
     }
 
-    private ProcessPeople(people: List<Person>, interpersonalFactor: number) {
+    private ProcessPeople(people: List<Person>, environment: Environment) {
         for (var i = 0; i < people.size; i++) {
             for (var k = 0; k < people.size; k++) {
-                people.get(i).StatusHandler = this.Transmit(people.get(i), people.get(k), interpersonalFactor);
+                this.Transmit(people.get(i), people.get(k), environment);
             }
         }
     }
@@ -229,11 +237,12 @@ export class Model {
 
                     var w = workers.get(0);// .StatusHandler = new AsymptomaticStatusHandler();
                     w.Disease.Status = Status.Incubation;
+                    w.Disease.Infectiousness = 1;
                 }
             }
             else {
 
-                this.ProcessPeople(workers, this.Environments.GetEnvironmentsByType(EnvironmentType.Home)?.get(0)?.InterpersonalContactFactor);
+                this.ProcessPeople(workers, this.Environments.GetEnvironmentsByType(EnvironmentType.Home)?.get(0));
             }
         });
     }
@@ -251,7 +260,7 @@ export class Model {
                 case EnvironmentType.Office:
                 case EnvironmentType.School: {
 
-                    this.ProcessPeople(people, environment.InterpersonalContactFactor);
+                    this.ProcessPeople(people, environment);
                     break;
                 }
                 case EnvironmentType.Retail: {
@@ -269,26 +278,26 @@ export class Model {
                     });
 
 
-                    this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
+                    this.ProcessPeople(combinedSet, environment);
                     break;
                 }
                 case EnvironmentType.Entertainment:
-                    {
+                {
 
-                        var combinedSet = new List<Person>(people);
-                        this.People.AllPeople.forEach(person => {
-                            if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
-                                // ignore other retail workers, social industry workers and  school children; 
+                    var combinedSet = new List<Person>(people);
+                    this.People.AllPeople.forEach(person => {
+                        if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
+                            // ignore other retail workers, social industry workers and  school children; 
+                        }
+                        else {
+                            if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size) {
+                                combinedSet.add(person);
                             }
-                            else {
-                                if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size) {
-                                    combinedSet.add(person);
-                                }
-                            }
-                        });
-                        this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
-                        break;
-                    }
+                        }
+                    });
+                    this.ProcessPeople(combinedSet, environment);
+                    break;
+                }
             }
         });
     }
@@ -305,7 +314,7 @@ export class Model {
                 }
                 case EnvironmentType.Office: {
 
-                    this.ProcessPeople(people, environment.InterpersonalContactFactor);
+                    this.ProcessPeople(people, environment);
                     break;
                 }
                 case EnvironmentType.Retail: {
@@ -319,7 +328,7 @@ export class Model {
                         }
                     });
 
-                    this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
+                    this.ProcessPeople(combinedSet, environment);
                     break;
                 }
                 case EnvironmentType.Entertainment:
@@ -334,7 +343,7 @@ export class Model {
                             }
                         });
 
-                        this.ProcessPeople(combinedSet, environment.InterpersonalContactFactor);
+                        this.ProcessPeople(combinedSet, environment);
                         break;
                     }
             }
@@ -360,7 +369,7 @@ export class Model {
                 }
             }
 
-            this.ProcessPeople(combinedSet, env.InterpersonalContactFactor);
+            this.ProcessPeople(combinedSet, env);
 
         });
 

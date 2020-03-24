@@ -42,12 +42,20 @@ export class List<T> implements Iterable<T>{
         }
     }
 
-    any(callback: (e: T) => boolean) {
+    any(callback: (e: T) => boolean):boolean {
         for (var i = 0; i < this.items.length; i++) {
             if (callback(this.items[i]))
                 return true;
         }
         return false;
+    }
+
+    all(callback: (e: T) => boolean):boolean {
+        for (var i = 0; i < this.items.length; i++) {
+            if (!callback(this.items[i]))
+                return false;
+        }
+        return true;
     }
 
     filter(callback: (f: T) => boolean): List<T> {
