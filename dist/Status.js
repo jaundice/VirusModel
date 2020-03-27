@@ -1,3 +1,13 @@
+/*
+
+Clear ->
+            Incubation ->
+                            Asymptomatic -> Recovered
+                            MildyIll     -> Recovered
+                                            SeriouslyIll -> Recovered
+                                                            Dead
+
+*/
 (function (factory) {
     if (typeof module === "object" && typeof module.exports === "object") {
         var v = factory(require, exports);
@@ -12,11 +22,12 @@
     var Status;
     (function (Status) {
         Status[Status["Clear"] = 0] = "Clear";
-        Status[Status["Asymptomatic"] = 1] = "Asymptomatic";
-        Status[Status["MildlyIll"] = 2] = "MildlyIll";
-        Status[Status["SeriouslyIll"] = 3] = "SeriouslyIll";
-        Status[Status["Dead"] = 4] = "Dead";
-        Status[Status["Recovered"] = 5] = "Recovered";
+        Status[Status["Incubation"] = 1] = "Incubation";
+        Status[Status["Asymptomatic"] = 2] = "Asymptomatic";
+        Status[Status["MildlyIll"] = 3] = "MildlyIll";
+        Status[Status["SeriouslyIll"] = 4] = "SeriouslyIll";
+        Status[Status["Dead"] = 5] = "Dead";
+        Status[Status["Recovered"] = 6] = "Recovered";
     })(Status = exports.Status || (exports.Status = {}));
     ;
 });

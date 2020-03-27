@@ -8,12 +8,11 @@ function Run() {
 
     var c = new AppInitConfig();
     c.PopulationSize = 50000;
-    //c.ProportionOfChildren = 0.3;
-    c.SeriousIllnessRatio = 1 / 8; //anticipated serious illness is 1 in 8 of the population 
+
     c.ReinfectionProbability = 0.008;
     c.RandomInfectionProbability = 0.000005;
     c.PersonalSuceptabilityDeviation = 0.015;
-    c.MeanPersonalSusceptability = 0.3;
+    c.MeanPersonalSusceptability = 0.5;
 
     c.MeanInterpersonalContactFactors.set(EnvironmentType.Home, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.Home, 0.15);
@@ -22,7 +21,7 @@ function Run() {
     c.MeanInterpersonalDeviation.set(EnvironmentType.Office, 0.15);
 
     c.MeanInterpersonalContactFactors.set(EnvironmentType.Entertainment, 0.4);
-    c.MeanInterpersonalDeviation.set(EnvironmentType.Entertainment, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Entertainment, 0.1);
 
     c.MeanInterpersonalContactFactors.set(EnvironmentType.School, 0.6);
     c.MeanInterpersonalDeviation.set(EnvironmentType.School, 0.1);
@@ -30,19 +29,19 @@ function Run() {
     c.MeanInterpersonalContactFactors.set(EnvironmentType.Retail, 0.2);
     c.MeanInterpersonalDeviation.set(EnvironmentType.Retail, 0.1);
 
-    //number of different types of environment
-    c.EnvironmentCounts.set(EnvironmentType.School, 5);
-    c.EnvironmentCounts.set(EnvironmentType.Office, 100);
-    c.EnvironmentCounts.set(EnvironmentType.Retail, 20);
-    c.EnvironmentCounts.set(EnvironmentType.Entertainment, 20);
-    c.EnvironmentCounts.set(EnvironmentType.Home, 1); //dummy: represents homeworkers, housebound, stay at home parents etc
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Outdoors, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Outdoors, 0.1);
 
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Factory, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Factory, 0.1);
+
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Logistics, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Logistics, 0.1);
+
+    c.MeanInterpersonalContactFactors.set(EnvironmentType.Hospital, 0.2);
+    c.MeanInterpersonalDeviation.set(EnvironmentType.Hospital, 0.1);
 
     c.NumberOfHouseholds = 13000;
-
-    c.RecoveryTime = 14; //days
-    c.AsymptomaticTime = 7; //days
-    c.DeathRatio = 0.2; //proportion of severe cases that are terminal
 
     c.SocialEveningFactor = 0.08; //proportion of adults socialising at night
     c.SocialLunchFactor = 0.1; // proprtion of adults socialising at lunch;
@@ -51,8 +50,12 @@ function Run() {
 
     c.ChildRetailFactor = 0.1; //children shopping out of school hours
 
-    c.MildSymptomsQuarantineFactor = 0.75; //proportion of mild cases going into quarantine
-    c.QuarantineWholeHouseholdOnInfection = false; //quarantine whole household if any housemember is quarantined
+
+    c.AvailableBeds =200;
+    c.AvailableICU = 20;
+    c.AvailableVentilators = 25;
+    c.EnvironmentCount = 900;
+    
 
     var app = new App();
     app.Init(c);
@@ -64,7 +67,7 @@ function Run() {
 
     console.log();
 
-    console.log("Day,Hour,TotalHours,clearCount,asymptomaticCount,mildCount,seriousCount,recoveredCount,deadCount");
+    console.log("Day,Hour,TotalHours,clearCount,incubatorCount,asymptomaticCount,mildCount,seriousCount,recoveredCount,deadCount,medicsCritical,bedsCritical,ICUCritical,ventilatorsCritical");
 
     for (var i = 0; i < 11000; i++) {
         app.TimeElapsed();
@@ -77,37 +80,6 @@ function Run() {
 Run();
 
 function reporter (a: App)  {
-
-    var clearCount = 0;
-    var deadCount = 0;
-    var mildCount = 0;
-    var seriousCount = 0;
-    var recoveredCount = 0;
-    var asymptomaticCount = 0;
-
-    a.People.forEach(p => {
-        switch (p.StatusHandler.Status) {
-            case Status.Asymptomatic:
-                asymptomaticCount++;
-                break;
-            case Status.Clear:
-                clearCount++;
-                break;
-            case Status.Dead:
-                deadCount++;
-                break;
-            case Status.MildlyIll:
-                mildCount++;
-                break;
-            case Status.SeriouslyIll:
-                seriousCount++;
-                break;
-            case Status.Recovered:
-                recoveredCount++;
-                break;
-        }
-    });
-
-    //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
-    console.log(`${a.Time.Day},${a.Time.Hour},${a.Time.Day *24 + a.Time.Hour},${clearCount},${asymptomaticCount},${mildCount},${seriousCount},${recoveredCount},${deadCount}`);
+   //console.log(`Day  ${a.Time.Day},\tHour  ${a.Time.Hour};\tClear ${clearCount};\tAsymptomatic ${asymptomaticCount};\tMild ${mildCount};\tSevere ${seriousCount};\tRecovered ${recoveredCount};\tDead ${deadCount}`);
+    console.log(`${a.Model.Time.Day},${a.Model.Time.Hour},${a.Model.Time.Day *24 + a.Model.Time.Hour},${a.Model.Result.Counts.get(Status.Clear)},${a.Model.Result.Counts.get(Status.Incubation)},${a.Model.Result.Counts.get(Status.Asymptomatic)},${a.Model.Result.Counts.get(Status.MildlyIll)},${a.Model.Result.Counts.get(Status.SeriouslyIll)},${a.Model.Result.Counts.get(Status.Recovered)},${a.Model.Result.Counts.get(Status.Dead)},${a.Model.HealthService.MedicsCritical},${a.Model.HealthService.BedsCritical},${a.Model.HealthService.ICUCritical},${a.Model.HealthService.VentilatorsCritical}`);
 };

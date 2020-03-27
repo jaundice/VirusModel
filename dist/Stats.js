@@ -27,6 +27,12 @@
         }
     }
     exports.Stats = Stats;
+    Stats.Clamp = (min, max, gen) => {
+        var n = gen();
+        n = Math.max(min, n);
+        n = Math.min(max, n);
+        return n;
+    };
     ;
 });
 //# sourceMappingURL=Stats.js.map

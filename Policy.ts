@@ -46,4 +46,3 @@ export abstract class Policy {
 
 
 }
-

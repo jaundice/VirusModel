@@ -20,6 +20,12 @@
         get Hour() {
             return this._hour;
         }
+        set Day(d) {
+            this._day = d;
+        }
+        set Hour(h) {
+            this._hour = h;
+        }
         Reset() {
             this._day = 0;
             this._hour = 0;

@@ -10,17 +10,23 @@
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     class Environment {
-        get environmentType() {
+        get EnvironmentType() {
             return this._environmentType;
         }
-        set environmentType(environmentType) {
+        set EnvironmentType(environmentType) {
             this._environmentType = environmentType;
         }
-        get interpersonalContactFactor() {
+        get InterpersonalContactFactor() {
             return this._interpersonalContactFactor;
         }
-        set interpersonalContactFactor(factor) {
+        set InterpersonalContactFactor(factor) {
             this._interpersonalContactFactor = factor;
+        }
+        get IsKeyInfrastructure() {
+            return this._isKeyInfrastructure;
+        }
+        set IsKeyInfrastructure(isKey) {
+            this._isKeyInfrastructure = isKey;
         }
     }
     exports.Environment = Environment;

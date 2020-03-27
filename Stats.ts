@@ -16,4 +16,12 @@ export class Stats {
     static getUniform(min:number, max:number){
         return (Math.random() * (max - min))+min;
     }
+
+    static Clamp = (min: number, max: number, gen: () => number) => {
+        var n = gen();
+
+        n = Math.max(min, n);
+        n = Math.min(max, n);
+        return n;
+    }
 };

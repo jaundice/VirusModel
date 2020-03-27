@@ -7,7 +7,7 @@ import { Status } from "./Status";
 
 
 export class Person {
-    private _statusHandler: StatusHandler;
+    //private _statusHandler: StatusHandler;
     //private _susceptability: number;
     private _householdIndex: number;
     private _usualDaytimeEnvironment: Environment;
@@ -31,20 +31,16 @@ export class Person {
         return this._isKeyWorker;
     }
 
+    set IsKeyWorker(iskey:boolean){
+        this._isKeyWorker = iskey;
+    }
+
     get AgeDemographic() {
         return this._ageDemographic;
     }
 
     get Health(): BasicHealth {
         return this._health;
-    }
-
-    get StatusHandler(): StatusHandler {
-        return this._statusHandler;
-    }
-
-    set StatusHandler(statusHandler: StatusHandler) {
-        this._statusHandler = statusHandler;
     }
 
     get Susceptability(): number {

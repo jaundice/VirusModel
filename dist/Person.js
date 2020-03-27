@@ -4,40 +4,59 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports"], factory);
+        define(["require", "exports", "./Disease", "./Status"], factory);
     }
 })(function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    const Disease_1 = require("./Disease");
+    const Status_1 = require("./Status");
     class Person {
-        get statusHandler() {
-            return this._statusHandler;
+        constructor(ageDemographic, health) {
+            this._disease = new Disease_1.Disease(Status_1.Status.Clear);
+            this._health = health;
+            this._ageDemographic = ageDemographic;
         }
-        set statusHandler(statusHandler) {
-            this._statusHandler = statusHandler;
+        get Disease() {
+            return this._disease;
         }
-        get susceptability() {
-            return this._susceptability;
+        set Disease(disease) {
+            this._disease = disease;
         }
-        set susceptability(susceptability) {
-            this._susceptability = susceptability;
+        get IsKeyWorker() {
+            return this._isKeyWorker;
         }
-        get householdIndex() {
+        set IsKeyWorker(iskey) {
+            this._isKeyWorker = iskey;
+        }
+        get AgeDemographic() {
+            return this._ageDemographic;
+        }
+        get Health() {
+            return this._health;
+        }
+        get Susceptability() {
+            return 1.0 - this.Health.HealthScore; //this._susceptability;
+        }
+        // set susceptability(susceptability: number) {
+        //     this._susceptability = susceptability;
+        // }
+        get HouseholdIndex() {
             return this._householdIndex;
         }
-        set householdIndex(index) {
+        set HouseholdIndex(index) {
             this._householdIndex = index;
         }
-        get usualDaytimeEnvironment() {
+        get UsualDaytimeEnvironment() {
             return this._usualDaytimeEnvironment;
         }
-        set usualDaytimeEnvironment(env) {
+        set UsualDaytimeEnvironment(env) {
             this._usualDaytimeEnvironment = env;
         }
-        get isQuarantined() {
+        get IsQuarantined() {
             return this._isQuarantined;
         }
-        set isQuarantined(q) {
+        set IsQuarantined(q) {
             this._isQuarantined = q;
         }
     }

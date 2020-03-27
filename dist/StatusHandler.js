@@ -43,6 +43,20 @@
     }
     exports.CleanStatusHandler = CleanStatusHandler;
     ;
+    class IncubatorStatusHandler extends StatusHandler {
+        get Infectiousness() {
+            return this._infectiousness;
+        }
+        constructor() {
+            super(Status_1.Status.Incubation);
+            this._infectiousness = 0.6;
+        }
+        Tick() {
+            super.Tick();
+            //do nothing
+        }
+    }
+    exports.IncubatorStatusHandler = IncubatorStatusHandler;
     class AsymptomaticStatusHandler extends StatusHandler {
         constructor() {
             super(Status_1.Status.Asymptomatic);

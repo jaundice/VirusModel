@@ -1,4 +1,6 @@
 import { Model } from "./Model";
+import { Status } from "./Status";
+import { EnvironmentType } from "./EnvironmentType";
 
 export class HealthService {
     private _availableMedicalStaff: number;
@@ -100,7 +102,11 @@ export class HealthService {
     }
 
     UpdateProperties(model: Model) {
-
+        this._patientDemand = model.Result?.Counts.get(Status.SeriouslyIll) + (0.5* model.Result?.Counts.get(Status.MildlyIll)); 
+        this._bedDemand = model.Result?.Counts.get(Status.SeriouslyIll) + 0.3*model.Result?.Counts.get(Status.MildlyIll);
+        this._icuDemand = model.Result?.Counts.get(Status.SeriouslyIll);
+        this._ventilatorDemand = model.Result?.Counts.get(Status.SeriouslyIll);
+        this._availableMedicalStaff = model.People.AllPeople.filter(p=> p.IsKeyWorker && p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Hospital && [Status.Clear, Status.Recovered].indexOf(p.Disease.Status)> -1 ).size;
     }
 
 }

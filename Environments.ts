@@ -55,11 +55,33 @@ export class Environments {
     private _allKeyEnvironments: List<Environment> = new List<Environment>();
     private _environmentMap:Map<EnvironmentType, List<Environment>>;
 
+    constructor()
+    {
+        this._environmentMap = new Map<EnvironmentType, List<Environment>>();
+        this._environmentMap.set(EnvironmentType.Entertainment, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Factory, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Home, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Hospital, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Logistics, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Office, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Outdoors, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.Retail, new List<Environment>());
+        this._environmentMap.set(EnvironmentType.School, new List<Environment>());    
+    }
+
     GetEnvironmentsByType(type:EnvironmentType):List<Environment>{
         return this._environmentMap.get(type);
     }
 
-    static GetRandomEnvironment():EnvironmentType {
+    Add(environment:Environment){
+        this._allEnvironments.add(environment);
+        this._environmentMap.get(environment.EnvironmentType).add(environment);
+        if(environment.IsKeyInfrastructure){
+            this._allKeyEnvironments.add(environment);
+        }
+    }
+
+    static GetRandomEnvironmentType():EnvironmentType {
         var u = Stats.getUniform(0, 1);
         if (u < manufaturingRatio) return EnvironmentType.Factory;
         else if (u < manufaturingRatio + wholesaleRetail) return EnvironmentType.Retail;

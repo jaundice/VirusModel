@@ -16,19 +16,20 @@ import { EnvironmentType } from "./EnvironmentType";
 import { Environments } from "./Environments";
 import { Environment } from "./Environment";
 import { List } from "./List";
+import { AgeDemographic } from "./Demographic";
 
 export class Model {
     private _healthService: HealthService;
     private _policies: Policies = new Policies();
     private _triggers: Triggers = new Triggers();
     private _runningConfig: RunningConfig;
-    private _households: Households = new Households();
+    private _households: Households;
     private _people: People;
+    private _environments: Environments;
     private _initConfig: AppInitConfig;
     private _time: Time = new Time();
     private _result: Result;
-    private _environments: Environments;
-    private _usualDaytimeEnvironmentMap: Map<Environment, List<Person>> = new Map<Environment, List<Person>>();
+    private _usualDaytimeEnvironmentMap: Map<Environment, List<Person>>;
 
     get UsualDaytimeEnvironmentMap() {
         return this._usualDaytimeEnvironmentMap;
@@ -62,9 +63,22 @@ export class Model {
         return this._environments;
     }
 
-    constructor(healthService: HealthService, triggers: TriggerBase[], policies: Policy[], people: People) {
+    constructor(appInitConfig: AppInitConfig,
+        healthService: HealthService,
+        triggers: TriggerBase[],
+        policies: Policy[],
+        people: People,
+        households: Households,
+        environments: Environments,
+        daytimeEnvironmentMap: Map<Environment, List<Person>>) {
+
+        this._initConfig = appInitConfig;
         this._healthService = healthService;
         this._people = people;
+        this._households = households;
+        this._environments = environments;
+        this._usualDaytimeEnvironmentMap = daytimeEnvironmentMap;
+
         for (var i = 0; i < triggers.length; i++) {
             this._triggers.AddTrigger(triggers[i]);
         }
@@ -145,21 +159,20 @@ export class Model {
         //    return;
         //}
 
-        var chance = environment.InterpersonalContactFactor
-            * this._runningConfig.InterpersonalContactFactorModifier
-            * person2.StatusHandler.Infectiousness
-            * person1.Susceptability / 24;
+        var chance =
+            environment.InterpersonalContactFactor
+            * this._runningConfig.InterpersonalContactFactorModifier.get(environment.EnvironmentType)
+            * person2.Disease.Infectiousness
+            * person1.Susceptability 
+            / (24 * 7);
 
 
         switch (person1.Disease.Status) {
-            case Status.Dead: {
-                return;
-            }
             case Status.Clear:
                 {
                     if (Stats.getUniform(0, 1) < chance) {
                         person1.Disease.Status = Status.Incubation;
-                        person1.Disease.Infectiousness = 1;
+                        person1.Disease.Infectiousness = 0.6;
                         return;
                     }
                 }
@@ -167,13 +180,15 @@ export class Model {
                 {
                     if (Stats.getUniform(0, 1) < chance * this._runningConfig.ReinfectionProbability) {
                         person1.Disease.Status = Status.Incubation;
-                        person1.Disease.Infectiousness = 1;
+                        person1.Disease.Infectiousness = 0.6;
                         return;
                     }
                 }
+            case Status.Incubation:
             case Status.Asymptomatic: //already infected
             case Status.MildlyIll:
             case Status.SeriouslyIll:
+            case Status.Dead:
                 return;
         }
 
@@ -237,7 +252,7 @@ export class Model {
 
                     var w = workers.get(0);// .StatusHandler = new AsymptomaticStatusHandler();
                     w.Disease.Status = Status.Incubation;
-                    w.Disease.Infectiousness = 1;
+                    w.Disease.Infectiousness = 0.6;
                 }
             }
             else {
@@ -271,7 +286,7 @@ export class Model {
                             // ignore other retail workers, social industry workers and  school children; 
                         }
                         else {
-                            if (Stats.getUniform(0, 1) < this._runningConfig.RetailLunchtimeFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Retail).size) {
+                            if (Stats.getUniform(0, 1) < this._runningConfig.RetailLunchtimeFactor / (this.Environments.GetEnvironmentsByType(EnvironmentType.Retail).size * 24)) {
                                 combinedSet.add(person);
                             }
                         }
@@ -282,22 +297,22 @@ export class Model {
                     break;
                 }
                 case EnvironmentType.Entertainment:
-                {
+                    {
 
-                    var combinedSet = new List<Person>(people);
-                    this.People.AllPeople.forEach(person => {
-                        if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
-                            // ignore other retail workers, social industry workers and  school children; 
-                        }
-                        else {
-                            if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size) {
-                                combinedSet.add(person);
+                        var combinedSet = new List<Person>(people);
+                        this.People.AllPeople.forEach(person => {
+                            if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Entertainment || person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
+                                // ignore other retail workers, social industry workers and  school children; 
                             }
-                        }
-                    });
-                    this.ProcessPeople(combinedSet, environment);
-                    break;
-                }
+                            else {
+                                if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / (this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size*24)) {
+                                    combinedSet.add(person);
+                                }
+                            }
+                        });
+                        this.ProcessPeople(combinedSet, environment);
+                        break;
+                    }
             }
         });
     }
@@ -320,9 +335,9 @@ export class Model {
                 case EnvironmentType.Retail: {
 
                     var combinedSet = new List<Person>(people);
-                    this.People.AllPeople.forEach(person => { //school kids shopping
+                    this.People.AllPeople.filter(a=>a.AgeDemographic ==AgeDemographic.Under10).forEach(person => { //school kids shopping
                         if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
-                            if (Stats.getUniform(0, 1) < this._runningConfig.ChildRetailFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Retail).size) {
+                            if (Stats.getUniform(0, 1) < this._runningConfig.ChildRetailFactor / (this.Environments.GetEnvironmentsByType(EnvironmentType.Retail).size * 24)) {
                                 combinedSet.add(person);
                             }
                         }
@@ -335,9 +350,9 @@ export class Model {
                     {
 
                         var combinedSet = new List<Person>(people);
-                        this.People.AllPeople.forEach(person => { //schoolkids being social
+                        this.People.AllPeople.filter(a=>a.AgeDemographic == AgeDemographic.Under10).forEach(person => { //schoolkids being social
                             if (person.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.School) {
-                                if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size) {
+                                if (Stats.getUniform(0, 1) < this._runningConfig.SocialLunchFactor / (this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size * 24) ) {
                                     combinedSet.add(person);
                                 }
                             }
@@ -357,15 +372,19 @@ export class Model {
             var workers = this.UsualDaytimeEnvironmentMap.get(env);
             var combinedSet = new List<Person>(workers);
 
+            var adults = this.People.AllPeople.filter(a => a.AgeDemographic != AgeDemographic.Under10 
+                && a.UsualDaytimeEnvironment.EnvironmentType != EnvironmentType.Entertainment);
+
+            var entertainmentCount = this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size;
+
+            var cutoff = this._runningConfig.SocialEveningFactor / (entertainmentCount * 24);
 
             //adults socializing
-            for (var i = 0; i < this.People.AllPeople.size; i++) {
-                var p: Person = this.People.AllPeople.get(i);
+            for (var i = 0; i < adults.size; i++) {
+                var p: Person = adults.get(i);
 
-                if (p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Retail || p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Home || p.UsualDaytimeEnvironment.EnvironmentType == EnvironmentType.Office) {
-                    if (Stats.getUniform(0, 1) < this._runningConfig.SocialEveningFactor / this.Environments.GetEnvironmentsByType(EnvironmentType.Entertainment).size) {
-                        combinedSet.add(p);
-                    }
+                if (Stats.getUniform(0, 1) < cutoff) {
+                    combinedSet.add(p);
                 }
             }
 
