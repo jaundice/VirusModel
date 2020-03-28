@@ -45,7 +45,7 @@
                 var env = new Environment_1.Environment();
                 env.EnvironmentType = Environments_1.Environments.GetRandomEnvironmentType();
                 env.InterpersonalContactFactor = interpersonalContactGenerator(env.EnvironmentType);
-                env.IsKeyInfrastructure = keyInfrastructureGenerator() < 0.3;
+                env.IsKeyInfrastructure = Stats_1.Stats.getUniform(0, 1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
                 environments.Add(env);
                 usualDaytimeEnv.set(env, new List_1.List());
             }
@@ -60,7 +60,7 @@
                 var ageDemograhic = Demographic_1.Demographics.RandomAgeDemographic();
                 var health = Demographic_1.Demographics.GetRandomHealth(ageDemograhic);
                 var person = new Person_1.Person(ageDemograhic, health);
-                person.IsKeyWorker = keyInfrastructureGenerator() < 0.3;
+                //person.IsKeyWorker = keyInfrastructureGenerator() < 0.3;
                 lstPeople.add(person);
                 if (i < config.NumberOfHouseholds) { //ensure each household has a member
                     households.Households.get(i).Members.add(person);
@@ -81,6 +81,7 @@
                     var env = envo.get(Math.trunc(Stats_1.Stats.getUniform(0, envo.size))); // for now assign people uniformly across environments
                     (_b = usualDaytimeEnv.get(env)) === null || _b === void 0 ? void 0 : _b.add(person);
                     person.UsualDaytimeEnvironment = env;
+                    person.IsKeyWorker = Stats_1.Stats.getUniform(0, 1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
                 }
             }
             var healthService = new HealthService_1.HealthService(config.MedicalStaffCount, config.AvailableBeds, config.AvailableICU, config.AvailableVentilators);

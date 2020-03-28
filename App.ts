@@ -53,7 +53,7 @@ export class App {
             var env = new Environment();
             env.EnvironmentType = Environments.GetRandomEnvironmentType();
             env.InterpersonalContactFactor = interpersonalContactGenerator(env.EnvironmentType);
-            env.IsKeyInfrastructure = keyInfrastructureGenerator() < 0.3;
+            env.IsKeyInfrastructure = Stats.getUniform(0,1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
             environments.Add(env);
             usualDaytimeEnv.set(env, new List<Person>());
 
@@ -76,7 +76,7 @@ export class App {
 
             var person = new Person(ageDemograhic, health);
 
-            person.IsKeyWorker = keyInfrastructureGenerator() < 0.3;
+            //person.IsKeyWorker = keyInfrastructureGenerator() < 0.3;
 
             lstPeople.add(person);
 
@@ -104,6 +104,8 @@ export class App {
                 var env = envo.get(Math.trunc(Stats.getUniform(0, envo.size)));// for now assign people uniformly across environments
                 usualDaytimeEnv.get(env)?.add(person);
                 person.UsualDaytimeEnvironment = env;
+
+                person.IsKeyWorker = Stats.getUniform(0, 1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
             }
         }
 
@@ -120,7 +122,7 @@ export class App {
         policies.push(isolate);
 
         var quarantine = new QuarantineHouseholdIfOneMemberIllPolicy();
-        quarantine.IsActive =true;
+        quarantine.IsActive = true;
         policies.push(quarantine);
 
         var trgLockdown = new PolicyTrigger(lockdown, a => a.Result?.Counts.get(Status.Dead) > 4);

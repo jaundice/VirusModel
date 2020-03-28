@@ -37,6 +37,7 @@
             this.AvailableBeds = 30;
             this.AvailableICU = 5;
             this.AvailableVentilators = 8;
+            this.EnvironmentKeyWorkerRatio = new Map();
         }
     }
     exports.AppInitConfig = AppInitConfig;

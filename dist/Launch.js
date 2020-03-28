@@ -38,6 +38,15 @@
         c.MeanInterpersonalDeviation.set(EnvironmentType_1.EnvironmentType.Logistics, 0.1);
         c.MeanInterpersonalContactFactors.set(EnvironmentType_1.EnvironmentType.Hospital, 0.2);
         c.MeanInterpersonalDeviation.set(EnvironmentType_1.EnvironmentType.Hospital, 0.1);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Entertainment, 0.05);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Factory, 0.3);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Home, 0);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Hospital, 0.8);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Logistics, 0.2);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Office, 0.1);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Outdoors, 0.2);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Retail, 0.1);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.School, 0.5);
         c.NumberOfHouseholds = 13000;
         c.SocialEveningFactor = 0.08; //proportion of adults socialising at night
         c.SocialLunchFactor = 0.1; // proprtion of adults socialising at lunch;

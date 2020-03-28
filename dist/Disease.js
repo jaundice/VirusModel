@@ -37,6 +37,7 @@
         set Infectiousness(infection) {
             this._infectiousness = infection;
         }
+        //private static randGen = () => Stats.getUniform(0, 1);
         static UpdateDiseaseProgression(person, model) {
             var d = person.Disease;
             if (d.Status == Status_1.Status.Dead) {
@@ -53,8 +54,8 @@
                 }
                 case Status_1.Status.Incubation: {
                     d.Infectiousness = 1;
-                    if (d.Time.Day > Stats_1.Stats.getGaussianRandomGenerator(7, 1.5)()) {
-                        if (this.randGen() > 0.8) {
+                    if (d.Time.Day > 5 && Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() > 0.5) {
+                        if (this.randGen() < 0.2 / 24) {
                             d.Status = Status_1.Status.MildlyIll;
                             d.Infectiousness = 0.6;
                         }
@@ -67,7 +68,7 @@
                 }
                 case Status_1.Status.Asymptomatic: {
                     if (d.Time.Day > 7) {
-                        if ((d.Time.Day > 14) || this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
+                        if (this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
                             d.Status = Status_1.Status.Recovered;
                             d.Infectiousness = 0;
                             break;
@@ -82,19 +83,24 @@
                         d.Time.Hour = hour;
                         break;
                     }
-                    d.Infectiousness = d.Time.Day < 7 ? 1 : 0.6;
+                    d.Infectiousness = d.Time.Day < 7 ? 0.6 : 0.3;
                     break;
                 }
                 case Status_1.Status.MildlyIll:
                     {
-                        if (this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
-                            d.Status = Status_1.Status.SeriouslyIll;
-                            d.Infectiousness = 0.6;
-                            break;
-                        }
-                        if (d.Time.Day > 14) {
+                        if (d.Time.Day > 7 && Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.8 / 24) {
                             d.Status = Status_1.Status.Recovered;
                             d.Infectiousness = 0;
+                            break;
+                        }
+                        else if (Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.2 / 24 && this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
+                            var day = d.Time.Day;
+                            var hour = d.Time.Hour;
+                            d.Status = Status_1.Status.SeriouslyIll;
+                            d.Infectiousness = 0.6;
+                            d.Time.Day = day;
+                            d.Time.Hour = hour;
+                            break;
                         }
                         if (d.Time.Day < 7) {
                             d.Infectiousness = 0.6;
@@ -105,19 +111,19 @@
                         break;
                     }
                 case Status_1.Status.SeriouslyIll: {
-                    if (d.Time.Day > Stats_1.Stats.getGaussianRandomGenerator(7, 1.5)()) {
+                    if (d.Time.Day > 7 && Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.5 / 24) {
+                        d.Status = Status_1.Status.Recovered;
+                        d.Infectiousness = 0;
+                        break;
+                    }
+                    else if (d.Time.Day > 3 && Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.5 / 24) {
                         if (this.randGen() * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor > person.Health.HealthScore) {
                             d.Status = Status_1.Status.Dead;
                             d.Infectiousness = 0;
                             break;
                         }
                     }
-                    else if (d.Time.Day > 21) {
-                        d.Status = Status_1.Status.Recovered;
-                        d.Infectiousness = 0;
-                        break;
-                    }
-                    d.Infectiousness = 0.5;
+                    d.Infectiousness = 0.3;
                     break;
                 }
             }
@@ -157,7 +163,7 @@
         }
     }
     exports.Disease = Disease;
-    Disease.gauss = Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.15);
-    Disease.randGen = () => Stats_1.Stats.Clamp(0, 1, Disease.gauss); //()=>Stats.getUniform(0,1); 
+    Disease.gauss = Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2);
+    Disease.randGen = () => Stats_1.Stats.Clamp(0, 1, Disease.gauss);
 });
 //# sourceMappingURL=Disease.js.map

@@ -39,8 +39,9 @@ export class Disease {
 
     }
 
-    private static gauss = Stats.getGaussianRandomGenerator(0.5, 0.15);
-    private static randGen = ()=> Stats.Clamp(0,1, Disease.gauss); //()=>Stats.getUniform(0,1); 
+    private static gauss = Stats.getGaussianRandomGenerator(0.5, 0.2);
+    private static randGen = () => Stats.Clamp(0, 1, Disease.gauss);
+    //private static randGen = () => Stats.getUniform(0, 1);
 
 
     static UpdateDiseaseProgression(person: Person, model: Model) {
@@ -63,8 +64,8 @@ export class Disease {
             }
             case Status.Incubation: {
                 d.Infectiousness = 1;
-                if (d.Time.Day > Stats.getGaussianRandomGenerator(7, 1.5)()) {
-                    if (this.randGen() > 0.8) {
+                if (d.Time.Day > 5 && Stats.getGaussianRandomGenerator(0.5, 0.2)() > 0.5) {
+                    if (this.randGen() < 0.2 / 24) {
                         d.Status = Status.MildlyIll;
                         d.Infectiousness = 0.6;
                     }
@@ -77,13 +78,13 @@ export class Disease {
             }
             case Status.Asymptomatic: {
                 if (d.Time.Day > 7) {
-                    if ((d.Time.Day > 14) || this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
+                    if (this.randGen() < 0.5 /24 && this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
                         d.Status = Status.Recovered;
                         d.Infectiousness = 0;
                         break;
                     }
                 }
-                else if (this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
+                else if (this.randGen() < 0.5 /24 && this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
                     var day = d.Time.Day;
                     var hour = d.Time.Hour;
 
@@ -95,22 +96,28 @@ export class Disease {
                 }
 
 
-                d.Infectiousness = d.Time.Day < 7 ? 1 : 0.6;
+                d.Infectiousness = d.Time.Day < 7 ? 0.6 : 0.3;
                 break;
 
             }
             case Status.MildlyIll:
                 {
 
-                    if (this.randGen() * this.AgeFactor(person.AgeDemographic) >  person.Health.HealthScore) {
-                        d.Status = Status.SeriouslyIll;
-                        d.Infectiousness = 0.6
-                        break;
-                    }
-                    if (d.Time.Day > 14) {
+                    if (d.Time.Day > 7 && Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.8 / 24) {
                         d.Status = Status.Recovered;
                         d.Infectiousness = 0;
+                        break;
+                    } else if (Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.2 / 24 && this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
+                        var day = d.Time.Day;
+                        var hour = d.Time.Hour;
+
+                        d.Status = Status.SeriouslyIll;
+                        d.Infectiousness = 0.6
+                        d.Time.Day = day;
+                        d.Time.Hour = hour;
+                        break;
                     }
+
                     if (d.Time.Day < 7) {
                         d.Infectiousness = 0.6;
                     } else {
@@ -119,22 +126,19 @@ export class Disease {
                     break;
                 }
             case Status.SeriouslyIll: {
-
-                if (d.Time.Day > Stats.getGaussianRandomGenerator(7, 1.5)()) {
-                    if (this.randGen() * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor >  person.Health.HealthScore) {
+                if (d.Time.Day > 7 && Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.5 / 24) {
+                    d.Status = Status.Recovered;
+                    d.Infectiousness = 0;
+                    break;
+                }
+                else if (d.Time.Day > 3 && Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.5 / 24) {
+                    if ( this.randGen() < 0.5 /24 && this.randGen() * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor > person.Health.HealthScore) {
                         d.Status = Status.Dead;
                         d.Infectiousness = 0;
                         break;
                     }
                 }
-
-                else if (d.Time.Day > 21) {
-                    d.Status = Status.Recovered;
-                    d.Infectiousness = 0;
-                    break;
-                }
-
-                d.Infectiousness = 0.5;
+                d.Infectiousness = 0.3;
                 break;
 
             }

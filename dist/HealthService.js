@@ -69,10 +69,10 @@
             this._bedsCritical = bedFactor > 1;
             this._icuCritical = icuFactor > 1;
             this._ventilatorsCritical = ventilatorFactor > 1;
-            this._morbityFactor = Math.sqrt((medicFactor * medicFactor) +
+            this._morbityFactor = 2 * Math.sqrt((medicFactor * medicFactor) +
                 (bedFactor * bedFactor) +
                 (icuFactor * icuFactor) +
-                (ventilatorFactor * ventilatorFactor)) / 2; /* divided by 2 to give morbidity factor of 1 if all other factors are also 1 */
+                (ventilatorFactor * ventilatorFactor)) / (medicFactor + bedFactor + icuFactor + ventilatorFactor); /* divided by 2 to give morbidity factor of 1 if all other factors are also 1 */
         }
         UpdateProperties(model) {
             var _a, _b, _c, _d, _e, _f;

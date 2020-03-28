@@ -93,12 +93,12 @@ export class HealthService {
         this._bedsCritical = bedFactor > 1;
         this._icuCritical = icuFactor > 1;
         this._ventilatorsCritical = ventilatorFactor > 1;
-        this._morbityFactor = Math.sqrt(
+        this._morbityFactor = 2 *Math.sqrt(
                                         (medicFactor * medicFactor) + 
                                         (bedFactor * bedFactor) + 
                                         (icuFactor * icuFactor) + 
                                         (ventilatorFactor * ventilatorFactor)
-                                        )/ 2; /* divided by 2 to give morbidity factor of 1 if all other factors are also 1 */
+                                        )/ (medicFactor + bedFactor + icuFactor + ventilatorFactor); /* divided by 2 to give morbidity factor of 1 if all other factors are also 1 */
     }
 
     UpdateProperties(model: Model) {

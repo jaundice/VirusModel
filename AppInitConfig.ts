@@ -28,5 +28,6 @@ export class AppInitConfig {
     AvailableBeds: number = 30;
     AvailableICU: number = 5;
     AvailableVentilators: number = 8;
+    EnvironmentKeyWorkerRatio: Map<EnvironmentType, number> =  new Map<EnvironmentType, number>();
 
 };
