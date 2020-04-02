@@ -134,11 +134,13 @@ export class App {
         policies.push(isolate);
 
         var quarantine = new QuarantineHouseholdIfOneMemberIllPolicy();
-        quarantine.IsActive = true;
         policies.push(quarantine);
 
         var trgHandwash = new PolicyTrigger(handwashPolicy, a => a.Result?.Counts.get(Status.MildlyIll) > 100);
         triggers.push(trgHandwash);
+
+        var trgQuarantine = new PolicyTrigger(quarantine, a=>a.Result?.Counts.get(Status.SeriouslyIll) > 300); 
+        triggers.push(trgQuarantine);
 
         var trgSocialDistance = new PolicyTrigger(socialDistancePolicy, a => a.Result?.Counts.get(Status.MildlyIll) > 400);
         triggers.push(trgSocialDistance);
