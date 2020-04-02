@@ -16,15 +16,22 @@ export class Policies {
 
     ApplyPolicies(runningConfig: RunningConfig): RunningConfig {
         var c = runningConfig;
-        for (var i = 0; i < this._policies.size; i++) {
-            c = this._policies.get(i).ModifyRunningConfig(c);
+
+        var p = this._policies.filter(a=>a.IsActive);
+
+        for (var i = 0; i < p.size; i++) {
+            c = p.get(i).ModifyRunningConfig(c);
         };
 
         return c;
     }
 
+    UpdateModelFromPolicy(model:Model){
+        this._policies.filter(a=>a.IsActive).forEach(a=> a.UpdateModel(model));
+    }
+
     CanPeopleMeetInEnvironment(person1: Person, person2: Person, model: Model, environment: Environment): boolean {
-        return this._policies.all(p => p.CanPeopleMeetInEnvironment(person1, person2, model, environment));
+        return this._policies.filter(a=>a.IsActive).all(p => p.CanPeopleMeetInEnvironment(person1, person2, model, environment));
     }
 
 }

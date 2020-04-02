@@ -64,6 +64,7 @@
         UpdateModel() {
             this._time.Tick();
             this._triggers.FireTriggers(this);
+            this._policies.UpdateModelFromPolicy(this);
             this._runningConfig = this._policies.ApplyPolicies(new RunningConfig_1.RunningConfig(this._initConfig));
             this._healthService.UpdateProperties(this);
             this._healthService.UpdateFactors();

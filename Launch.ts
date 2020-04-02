@@ -42,15 +42,15 @@ function Run() {
     c.MeanInterpersonalDeviation.set(EnvironmentType.Hospital, 0.1);
 
 
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Entertainment, 0.05);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Factory, 0.3);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Home, 0);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Hospital, 0.8);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Logistics, 0.2);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Office, 0.1);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Outdoors, 0.2);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Retail, 0.1);
-    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.School, 0.5);
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Entertainment, 0.001); //news broadcasters etc
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Factory, 0.1); // manufacture of critical components
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Home, 0); // homeworlers don't need to travel
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Hospital,  530000 / 4515000); //frontline staff vs total staff
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Logistics, 0.2); // delivery drivers supplying food and medical supplies
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Office, 0.1); // governmental infrastructure
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Outdoors, 0.1); // farming, maintainance of roads and infrastructure
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.Retail, 0.1); // food and pharmacy
+    c.EnvironmentKeyWorkerRatio.set(EnvironmentType.School, 0.5); // teachers looking after keyworker children
 
     c.NumberOfHouseholds = 13000;
 

@@ -12,6 +12,8 @@
     const Status_1 = require("./Status");
     const Policy_1 = require("./Policy");
     class IsolateIllPeoplePolicy extends Policy_1.Policy {
+        UpdateModel(model) {
+        }
         ModifyRunningConfigInternal(runningConfig) {
             return runningConfig;
         }

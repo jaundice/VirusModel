@@ -68,13 +68,13 @@
                 }
                 case Status_1.Status.Asymptomatic: {
                     if (d.Time.Day > 7) {
-                        if (this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
+                        if (this.randGen() < 0.5 / 24 && this.randGen() * this.AgeFactor(person.AgeDemographic) < person.Health.HealthScore) {
                             d.Status = Status_1.Status.Recovered;
                             d.Infectiousness = 0;
                             break;
                         }
                     }
-                    else if (this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
+                    else if (this.randGen() < 0.5 / 24 && this.randGen() * this.AgeFactor(person.AgeDemographic) > person.Health.HealthScore) {
                         var day = d.Time.Day;
                         var hour = d.Time.Hour;
                         d.Status = Status_1.Status.MildlyIll;
@@ -117,7 +117,7 @@
                         break;
                     }
                     else if (d.Time.Day > 3 && Stats_1.Stats.getGaussianRandomGenerator(0.5, 0.2)() < 0.5 / 24) {
-                        if (this.randGen() * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor > person.Health.HealthScore) {
+                        if (this.randGen() < 0.5 / 24 && this.randGen() * this.AgeFactor(person.AgeDemographic) * model.HealthService.MorbidityFactor > person.Health.HealthScore) {
                             d.Status = Status_1.Status.Dead;
                             d.Infectiousness = 0;
                             break;

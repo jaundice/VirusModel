@@ -5,6 +5,9 @@ import { Model } from './Model';
 import { Status } from './Status';
 import { Policy } from './Policy';
 export class IsolateIllPeoplePolicy extends Policy {
+    public UpdateModel(model: Model): void {
+       
+    }
     protected ModifyRunningConfigInternal(runningConfig: RunningConfig): RunningConfig {
         return runningConfig;
     }

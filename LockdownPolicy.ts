@@ -7,6 +7,9 @@ import { Stats } from './Stats';
 import { Policy } from './Policy';
 import { AgeDemographic } from './Demographic';
 export class PolicyLockdown extends Policy {
+    public UpdateModel(model: Model): void {
+        
+    }
     protected ModifyRunningConfigInternal(runningConfig: RunningConfig): RunningConfig {
         return runningConfig;
     }

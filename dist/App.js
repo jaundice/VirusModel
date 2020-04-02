@@ -4,7 +4,7 @@
         if (v !== undefined) module.exports = v;
     }
     else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./EnvironmentType", "./Environment", "./Person", "./Stats", "./Status", "./List", "./Demographic", "./Model", "./Household", "./Environments", "./People", "./HealthService", "./Trigger", "./IsolateIllPeoplePolicy", "./LockdownPolicy", "./QuarantineHouseholdIfOneMemberIllPolicy"], factory);
+        define(["require", "exports", "./EnvironmentType", "./Environment", "./Person", "./Stats", "./List", "./Demographic", "./Model", "./Household", "./Environments", "./People", "./HealthService", "./IsolateIllPeoplePolicy", "./QuarantineHouseholdIfOneMemberIllPolicy"], factory);
     }
 })(function (require, exports) {
     "use strict";
@@ -13,7 +13,6 @@
     const Environment_1 = require("./Environment");
     const Person_1 = require("./Person");
     const Stats_1 = require("./Stats");
-    const Status_1 = require("./Status");
     const List_1 = require("./List");
     const Demographic_1 = require("./Demographic");
     const Model_1 = require("./Model");
@@ -21,9 +20,7 @@
     const Environments_1 = require("./Environments");
     const People_1 = require("./People");
     const HealthService_1 = require("./HealthService");
-    const Trigger_1 = require("./Trigger");
     const IsolateIllPeoplePolicy_1 = require("./IsolateIllPeoplePolicy");
-    const LockdownPolicy_1 = require("./LockdownPolicy");
     const QuarantineHouseholdIfOneMemberIllPolicy_1 = require("./QuarantineHouseholdIfOneMemberIllPolicy");
     class App {
         get Model() {
@@ -87,16 +84,16 @@
             var healthService = new HealthService_1.HealthService(config.MedicalStaffCount, config.AvailableBeds, config.AvailableICU, config.AvailableVentilators);
             var triggers = new Array();
             var policies = new Array();
-            var lockdown = new LockdownPolicy_1.PolicyLockdown();
-            policies.push(lockdown);
+            //var lockdown = new PolicyLockdown();
+            //policies.push(lockdown);
             var isolate = new IsolateIllPeoplePolicy_1.IsolateIllPeoplePolicy();
             isolate.IsActive = true;
             policies.push(isolate);
             var quarantine = new QuarantineHouseholdIfOneMemberIllPolicy_1.QuarantineHouseholdIfOneMemberIll();
             quarantine.IsActive = true;
             policies.push(quarantine);
-            var trgLockdown = new Trigger_1.PolicyTrigger(lockdown, a => { var _a; return ((_a = a.Result) === null || _a === void 0 ? void 0 : _a.Counts.get(Status_1.Status.Dead)) > 4; });
-            triggers.push(trgLockdown);
+            //var trgLockdown = new PolicyTrigger(lockdown, a => a.Result?.Counts.get(Status.Dead) > 4);
+            //triggers.push(trgLockdown);
             this._model = new Model_1.Model(config, healthService, triggers, policies, new People_1.People(lstPeople), households, environments, usualDaytimeEnv);
         }
         TimeElapsed() {

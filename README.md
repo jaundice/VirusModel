@@ -22,6 +22,9 @@ I am now trying to enhance the first version with changes over time with policy 
 * probably 80% of infections go unregistered
 * national employment breakdown by industry is in /usefuldata/emp13feb2020.xls from <https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/employmentandemployeetypes/datasets/employmentbyindustryemp13>
 
+530000 frontline NHS staff - sky news
+
+
 from <https://www.worldometers.info/demographics/uk-demographics/>
 
 * UK population 67886011
@@ -129,6 +132,8 @@ Age         Percentage
 80-84       2.4
 85+         2.2
 </pre>
+
+
 
 ## Things to model:
 

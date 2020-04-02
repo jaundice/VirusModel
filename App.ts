@@ -18,6 +18,7 @@ import { Policy } from "./Policy";
 import { IsolateIllPeoplePolicy } from "./IsolateIllPeoplePolicy";
 import { PolicyLockdown } from "./LockdownPolicy";
 import { QuarantineHouseholdIfOneMemberIll as QuarantineHouseholdIfOneMemberIllPolicy } from "./QuarantineHouseholdIfOneMemberIllPolicy";
+import { ProcativeTestingPolicy } from './ProcativeTestingPolicy';
 
 
 export class App {
@@ -114,6 +115,9 @@ export class App {
         var triggers: TriggerBase[] = new Array();
         var policies: Policy[] = new Array();
 
+        var proactiveTesting = new ProcativeTestingPolicy(0.005);
+        policies.push(proactiveTesting);
+
         var lockdown = new PolicyLockdown();
         policies.push(lockdown);
 
@@ -127,6 +131,9 @@ export class App {
 
         var trgLockdown = new PolicyTrigger(lockdown, a => a.Result?.Counts.get(Status.Dead) > 4);
         triggers.push(trgLockdown);
+
+        var trgProactive =  new PolicyTrigger(proactiveTesting, a=> a.Result?.Counts.get(Status.Dead)> 20);
+        triggers.push(trgProactive);
 
         this._model = new Model(config, healthService, triggers, policies, new People(lstPeople), households, environments, usualDaytimeEnv);
     }

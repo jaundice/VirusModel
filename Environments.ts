@@ -45,6 +45,7 @@ var health = 4515000 / Demographics.UKPopulation;
 var other = 1902000 / Demographics.UKPopulation;
 
 
+
 var outdoors = agricultureRatio + miningRatio + constructionRatio;
 var office = admin + publicAdmin + professional + realEstate + financial + information + other;
 var entertainment = accomodationFood;

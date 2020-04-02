@@ -12,11 +12,13 @@
     const Status_1 = require("./Status");
     const Policy_1 = require("./Policy");
     class QuarantineHouseholdIfOneMemberIll extends Policy_1.Policy {
+        UpdateModel(model) {
+        }
         ModifyRunningConfigInternal(runningConfig) {
             return runningConfig;
         }
         CanPeopleMeetInEnvironmentInternal(person1, person2, model, environment) {
-            return !model.Households.Households.get(person1.HouseholdIndex).Members.any(a => [Status_1.Status.MildlyIll, Status_1.Status.SeriouslyIll].indexOf(a.Disease.Status) > 1 || (a.Disease.Status == Status_1.Status.Recovered && a.Disease.Time.Day < 7));
+            return !model.Households.Households.get(person1.HouseholdIndex).Members.any(a => [Status_1.Status.MildlyIll, Status_1.Status.SeriouslyIll].indexOf(a.Disease.Status) > 1 || (a.Disease.Status == Status_1.Status.Recovered && a.Disease.Time.Day < 14));
         }
     }
     exports.QuarantineHouseholdIfOneMemberIll = QuarantineHouseholdIfOneMemberIll;

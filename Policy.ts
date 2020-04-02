@@ -44,5 +44,8 @@ export abstract class Policy {
 
     protected abstract CanPeopleMeetInEnvironmentInternal(person1: Person, person2: Person, model: Model, environment: Environment): boolean;
 
+    public abstract  UpdateModel(model:Model):void;
 
 }
+
+

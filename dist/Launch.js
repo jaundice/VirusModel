@@ -38,15 +38,15 @@
         c.MeanInterpersonalDeviation.set(EnvironmentType_1.EnvironmentType.Logistics, 0.1);
         c.MeanInterpersonalContactFactors.set(EnvironmentType_1.EnvironmentType.Hospital, 0.2);
         c.MeanInterpersonalDeviation.set(EnvironmentType_1.EnvironmentType.Hospital, 0.1);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Entertainment, 0.05);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Factory, 0.3);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Home, 0);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Hospital, 0.8);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Logistics, 0.2);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Office, 0.1);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Outdoors, 0.2);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Retail, 0.1);
-        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.School, 0.5);
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Entertainment, 0.001); //news broadcasters etc
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Factory, 0.1); // manufacture of critical components
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Home, 0); // homeworlers don't need to travel
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Hospital, 530000 / 4515000); //frontline staff vs total staff
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Logistics, 0.2); // delivery drivers supplying food and medical supplies
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Office, 0.1); // governmental infrastructure
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Outdoors, 0.1); // farming, maintainance of roads and infrastructure
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.Retail, 0.1); // food and pharmacy
+        c.EnvironmentKeyWorkerRatio.set(EnvironmentType_1.EnvironmentType.School, 0.5); // teachers looking after keyworker children
         c.NumberOfHouseholds = 13000;
         c.SocialEveningFactor = 0.08; //proportion of adults socialising at night
         c.SocialLunchFactor = 0.1; // proprtion of adults socialising at lunch;
