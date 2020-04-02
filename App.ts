@@ -19,6 +19,7 @@ import { IsolateIllPeoplePolicy } from "./IsolateIllPeoplePolicy";
 import { PolicyLockdown } from "./LockdownPolicy";
 import { QuarantineHouseholdIfOneMemberIll as QuarantineHouseholdIfOneMemberIllPolicy } from "./QuarantineHouseholdIfOneMemberIllPolicy";
 import { ProcativeTestingPolicy } from './ProcativeTestingPolicy';
+import { HandwashPolicy } from './HandwashPolicy';
 
 
 export class App {
@@ -54,7 +55,7 @@ export class App {
             var env = new Environment();
             env.EnvironmentType = Environments.GetRandomEnvironmentType();
             env.InterpersonalContactFactor = interpersonalContactGenerator(env.EnvironmentType);
-            env.IsKeyInfrastructure = Stats.getUniform(0,1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
+            env.IsKeyInfrastructure = Stats.getUniform(0, 1) < config.EnvironmentKeyWorkerRatio.get(env.EnvironmentType);
             environments.Add(env);
             usualDaytimeEnv.set(env, new List<Person>());
 
@@ -115,6 +116,13 @@ export class App {
         var triggers: TriggerBase[] = new Array();
         var policies: Policy[] = new Array();
 
+
+        var handwashPolicy = new HandwashPolicy(0.75);
+        policies.push(handwashPolicy);
+
+        var socialDistancePolicy = new HandwashPolicy(0.5);
+        policies.push(socialDistancePolicy);
+
         var proactiveTesting = new ProcativeTestingPolicy(0.005);
         policies.push(proactiveTesting);
 
@@ -122,17 +130,26 @@ export class App {
         policies.push(lockdown);
 
         var isolate = new IsolateIllPeoplePolicy();
-        isolate.IsActive = true;
+        //isolate.IsActive = true;
         policies.push(isolate);
 
         var quarantine = new QuarantineHouseholdIfOneMemberIllPolicy();
         quarantine.IsActive = true;
         policies.push(quarantine);
 
-        var trgLockdown = new PolicyTrigger(lockdown, a => a.Result?.Counts.get(Status.Dead) > 4);
+        var trgHandwash = new PolicyTrigger(handwashPolicy, a => a.Result?.Counts.get(Status.MildlyIll) > 100);
+        triggers.push(trgHandwash);
+
+        var trgSocialDistance = new PolicyTrigger(socialDistancePolicy, a => a.Result?.Counts.get(Status.MildlyIll) > 400);
+        triggers.push(trgSocialDistance);
+
+        var trgIsolate = new PolicyTrigger(isolate, a => a.Result?.Counts.get(Status.SeriouslyIll) > 200);
+        triggers.push(trgIsolate);
+
+        var trgLockdown = new PolicyTrigger(lockdown, a => a.Result?.Counts.get(Status.Dead) > 20);
         triggers.push(trgLockdown);
 
-        var trgProactive =  new PolicyTrigger(proactiveTesting, a=> a.Result?.Counts.get(Status.Dead)> 20);
+        var trgProactive = new PolicyTrigger(proactiveTesting, a => a.Result?.Counts.get(Status.Dead) > 4);
         triggers.push(trgProactive);
 
         this._model = new Model(config, healthService, triggers, policies, new People(lstPeople), households, environments, usualDaytimeEnv);
